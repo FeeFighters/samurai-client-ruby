@@ -1,0 +1,3 @@
+module Samurai
+  # Your code goes here...
+end
