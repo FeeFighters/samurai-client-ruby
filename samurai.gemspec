@@ -11,8 +11,8 @@ Gem::Specification.new do |s|
   s.summary     = "Integration gem for samurai.feefighters.com"
   s.description = "If you are an online merchant and using samurai.feefighers.com, this gem will make your life easy. Integrate with the samuari.feefighters.com portal and process transaction."
 
-  s.required_rubygems_version = ">= 1.3.6"
-  s.rubyforge_project         = "samurai"
+  s.required_rubygems_version = ">= 1.3.5"
+  # s.rubyforge_project         = "samurai"
 
   s.add_development_dependency "bundler", ">= 1.0.0"
 
