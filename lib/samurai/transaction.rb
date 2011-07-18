@@ -1,5 +1,7 @@
 class Samurai::Transaction < Samurai::Base
 
+  include Samurai::CacheableByToken
+  
   def id
     self.reference_id
   end

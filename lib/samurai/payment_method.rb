@@ -1,5 +1,7 @@
 class Samurai::PaymentMethod < Samurai::Base
   
+  include Samurai::CacheableByToken
+
   def id
     self.token
   end

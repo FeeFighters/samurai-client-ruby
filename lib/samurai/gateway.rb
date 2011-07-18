@@ -1,5 +1,5 @@
 class Samurai::Gateway < Samurai::Base
-
+  
   def self.the_gateway
     Samurai::Gateway.new(:id => Samurai.gateway_token)
   end

@@ -30,6 +30,7 @@ module Samurai
   
 end
 
+require 'samurai/cacheable_by_token'
 require 'samurai/base'
 require 'samurai/gateway'
 require 'samurai/payment_method'
