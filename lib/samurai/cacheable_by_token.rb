@@ -26,4 +26,10 @@ module Samurai::CacheableByToken
     end
   end
   
+  def save
+    super
+    # update self in the cache
+    self.class.cache[self.id] = self
+  end
+  
 end
