@@ -6,6 +6,7 @@ class Samurai::Transaction < Samurai::Base
   def id # :nodoc:
     transaction_token
   end
+  alias_method :token, :id
   
   # Captures an authorization. Optionally specify an +amount+ to do a partial capture of the initial
   # authorization. The default is to capture the full amount of the authroization.
