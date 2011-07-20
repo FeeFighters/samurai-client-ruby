@@ -1,36 +1,34 @@
 require 'test/spec_helper'
 
-describe "process a purchase" do
-
+describe "processing purchases" do
   it "should process successfully" do
     register_transaction_response(:type => 'purchase')
     purchase = Samurai::Gateway.purchase(PAYMENT_METHOD_TOKEN, seed_amount(1.00))
     purchase.should_not be_new_record
     purchase.gateway_response.success.should be_true
   end
-  
-end
 
-describe "void a purchase" do
+  it "should be able to void a recent purchase" do
+    register_transaction_response(:type => 'purchase')
+    purchase = Samurai::Gateway.purchase(PAYMENT_METHOD_TOKEN, seed_amount(2.00))
   
-  it "should create a void transaction" do
-    pending "currently we cannot void a purchase" do
-      register_transaction_response(:type => 'purchase')
-      purchase = Samurai::Gateway.purchase(PAYMENT_METHOD_TOKEN, seed_amount(2.00))
-    
-      register_transaction_response(:method => :post, :path => "transactions/#{purchase.id}/void", :type => 'void', :success => 'false')
-      void = purchase.void
-      void.should_not be_new_record
-      void.gateway_response.success.should be_true
-    end
+    register_transaction_response(:method => :post, :path => "transactions/#{purchase.id}/void", :type => 'void', :success => 'false')
+    void = purchase.void
+    void.should_not be_new_record
+    void.gateway_response.success.should be_true
   end
-  
-end
 
-describe "credit a purchase" do
+  it "should not be able to credit a recent purchase" do
+    register_transaction_response(:type => 'purchase')
+    purchase = Samurai::Gateway.purchase(PAYMENT_METHOD_TOKEN, seed_amount(3.00))
   
-  it "should create create a credit transaction" do
-    pending "currently we cannot credit a purchase" do
+    register_transaction_response(:method => :post, :path => "transactions/#{purchase.id}/credit", :type => 'void', :success => 'false')
+    credit = purchase.credit
+    credit.gateway_response.success.should be_false
+  end
+
+  it "should be able to credit a settled purchase" do
+    pending "currently we cannot force settle a purchase, so can't test this properly" do
       register_transaction_response(:type => 'purchase')
       purchase = Samurai::Gateway.purchase(PAYMENT_METHOD_TOKEN, seed_amount(3.00))
     
@@ -39,18 +37,15 @@ describe "credit a purchase" do
       credit.gateway_response.success.should be_true
     end
   end
-  
 end
 
-describe "process an authorization" do
+describe "processing authorizations" do
   it "should create a new authorization transaction" do
     register_transaction_response(:type => 'authorize')
     authorization = Samurai::Gateway.authorize(PAYMENT_METHOD_TOKEN, seed_amount(1.00))
     authorization.gateway_response.success.should be_true
   end
-end
 
-describe "capture an authorization" do
   it "should successfully capture" do
     register_transaction_response(:type => 'authorize')
     authorization = Samurai::Gateway.authorize(PAYMENT_METHOD_TOKEN, seed_amount(2.00))
@@ -60,7 +55,7 @@ describe "capture an authorization" do
     capture.gateway_response.success.should be_true
   end
   
-  it "should create a capture transaction without an amount" do
+  it "should capture an authorization without specifying an amount" do
     register_transaction_response(:type => 'authorize')
     authorization = Samurai::Gateway.authorize(PAYMENT_METHOD_TOKEN, seed_amount(3.00))
     
@@ -70,7 +65,7 @@ describe "capture an authorization" do
     capture.gateway_response.success.should be_true
   end
 
-  it "should create a partial capture transaction" do
+  it "should partially capture an authorization" do
     register_transaction_response(:type => 'authorize')
     authorization = Samurai::Gateway.authorize(PAYMENT_METHOD_TOKEN, seed_amount(4.00))
     
@@ -79,10 +74,8 @@ describe "capture an authorization" do
     capture.amount.intern.should be_equal "#{seed_amount(3.00)}".intern
     capture.gateway_response.success.should be_true
   end
-end
 
-describe "void an authorization" do
-  it "should create a successful void transaction" do
+  it "should void an authorization" do
     register_transaction_response(:type => 'authorize')
     authorization = Samurai::Gateway.authorize(PAYMENT_METHOD_TOKEN, seed_amount(5.00))
 
@@ -90,10 +83,8 @@ describe "void an authorization" do
     void = authorization.void
     void.gateway_response.success.should be_true
   end
-end
 
-describe "credit an authorization" do
-  it "should create a successful credit for the full amount" do
+  it "should credit an authorization for the full amount by default" do
     register_transaction_response(:type => 'authorize')
     authorization = Samurai::Gateway.authorize(PAYMENT_METHOD_TOKEN, seed_amount(6.00))
 
@@ -105,7 +96,7 @@ describe "credit an authorization" do
     end
   end
 
-  it "should create a successful credit for the partial amount" do
+  it "should partially credit an authorization" do
     register_transaction_response(:type => 'authorize')
     authorization = Samurai::Gateway.authorize(PAYMENT_METHOD_TOKEN, seed_amount(7.00))
 
