@@ -1,30 +1,33 @@
-module Samurai
+# Author::    Graeme Rouse
+# Copyright:: Copyright (c) 2011 Arizona Bay, LLC
 
-  mattr_accessor :site
-  @@site = case Rails.env
-    when 'development'
-      'http://localhost:3002'
-    when 'staging'
-      'http://staging.api.ubergateway.com'
-    else
-      'http://api.ubergateway.com'
-    end << '/v1/'
+module Samurai
+  SITE = 'https://samurai.feefighters.com/v1/'
+  DEFAULT_OPTIONS = {:site => SITE}
+
+  # Gets the provider site that the gem is configured to hit
+  def self.site # ::nodoc::
+    @@options[:site]
+  end
   
-  mattr_accessor :merchant_key
-  @@merchant_key = nil
+  def self.merchant_key # ::nodoc::
+    @@options[:merchant_key]
+  end
   
-  mattr_accessor :merchant_password
-  @@merchant_password = nil
+  def self.merchant_password # ::nodoc::
+    @@options[:merchant_password]
+  end
   
-  mattr_accessor :gateway_token
-  @@gateway_token = nil
+  def self.gateway_token # ::nodoc::
+    @@options[:gateway_token]
+  end
   
-  def self.setup_site(site, merchant_key, merchant_password, gateway_token = nil)
-    site += '/v1/' unless site =~ /\/v1\/$/
-    @@site = site
-    @@merchant_key = merchant_key
-    @@merchant_password = merchant_password
-    @@gateway_token = gateway_token if gateway_token
+  def self.options
+    @@options
+  end
+  
+  def self.options=(value)
+    @@options = (value || {}).reverse_merge(DEFAULT_OPTIONS)
     Samurai::Base.setup_site!
   end
   
@@ -35,3 +38,4 @@ require 'samurai/base'
 require 'samurai/gateway'
 require 'samurai/payment_method'
 require 'samurai/transaction'
+require 'samurai/message'
