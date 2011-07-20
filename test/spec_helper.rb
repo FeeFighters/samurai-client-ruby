@@ -7,7 +7,15 @@ Debugger.settings[:reload_source_on_change] = true
 SITE = ENV['site'] || 'http://localhost:3002/v1/'
 USE_MOCK = !ENV['site']
 PAYMENT_METHOD_TOKEN = ENV['payment_method_token'] || 'asdf'
-SEED = rand(10000) / 100.0
+
+RSpec.configure do |c|
+  c.before :all do
+    @@seed = rand(1000).to_f / 100.0
+  end
+  c.before :each do
+    @@seed += 1.0
+  end
+end
 
 require 'fakeweb'
 FakeWeb.allow_net_connect = !USE_MOCK
@@ -19,10 +27,6 @@ Samurai.options = {
   :merchant_password => ENV['merchant_password'] || '18e87d97b3a44b56fe07497e4812f14555db69df9e6ca16f', 
   :gateway_token => ENV['gateway_token'] || 'af762c3499f77c5f181650a7'
 }
-
-def seed_amount(value)
-  SEED + value.to_f
-end
 
 def register_transaction_response(options)
   return unless USE_MOCK
