@@ -19,27 +19,36 @@ class Samurai::Gateway < Samurai::Base
   # Parameters:
   # +payment_method_token+:: token identifying the payment method to authorize
   # +amount+:: amount to authorize
-  # +descriptor+:: optional descriptor for the transaction
-  # +custom+:: optional custom data, this data does not get passed to the gateway, it is stored within samurai.feefighters.com only
+  # options:: an optional has of additional values to pass in accepted values are:
+  # *+descriptor+:: descriptor for the transaction
+  # *+custom+:: custom data, this data does not get passed to the gateway, it is stored within samurai.feefighters.com only
+  # *+customer_reference+:: an identifier for the customer, this will appear in the gateway if supported
+  # *+billing_reference::+ an indentifier for the purchase, this will appear in the gateway if supported
   # Returns a Samurai::Transaction containing the gateway's response.
-  def purchase(payment_method_token, amount, descriptor = nil, custom = nil)
-    transaction = Samurai::Transaction.transaction_payload(:payment_method_token => payment_method_token, :amount => amount, :descriptor => descriptor, :custom => custom)
-    # send a purchase request
-    resp = post(:purchase, {}, transaction)
-    # return the response, wrapped in a Samurai::Transaction
-    Samurai::Transaction.new.load_attributes_from_response(resp)
+  def purchase(payment_method_token, amount, options = {})
+    execute(:purchase, options.merge(:payment_method_token => payment_method_token, :amount => amount))
   end
 
   # Authorize a payment_method for a particular amount. 
   # Parameters:
   # +payment_method_token+:: token identifying the payment method to authorize
   # +amount+:: amount to authorize
-  # +descriptor+:: optional descriptor for the transaction
-  # +custom+:: optional custom data, this data does not get passed to the gateway, it is stored within samurai.feefighters.com only
+  # options:: an optional has of additional values to pass in accepted values are:
+  # *+descriptor+:: descriptor for the transaction
+  # *+custom+:: custom data, this data does not get passed to the gateway, it is stored within samurai.feefighters.com only
+  # *+customer_reference+:: an identifier for the customer, this will appear in the gateway if supported
+  # *+billing_reference::+ an indentifier for the purchase, this will appear in the gateway if supported
   # Returns a Samurai::Transaction containing the gateway's response.
-  def authorize(payment_method_token, amount, descriptor = nil, custom = nil)
-    transaction = Samurai::Transaction.transaction_payload(:payment_method_token => payment_method_token, :amount => amount, :descriptor => descriptor, :custom => custom)
-    resp = post(:authorize, {}, transaction)
+  def authorize(payment_method_token, amount, options = {})
+    execute(:authorize, options.merge(:payment_method_token => payment_method_token, :amount => amount))
+  end
+  
+  private
+  
+  def execute(action, options = {})
+    transaction = Samurai::Transaction.transaction_payload(options)
+    # send a purchase request
+    resp = post(action, {}, transaction)
     # return the response, wrapped in a Samurai::Transaction
     Samurai::Transaction.new.load_attributes_from_response(resp)
   end
