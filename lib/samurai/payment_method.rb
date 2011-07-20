@@ -6,6 +6,7 @@ class Samurai::PaymentMethod < Samurai::Base
     self.token
   end
   
+  # Alias for +payment_method_token+
   def token
     self.payment_method_token
   end
@@ -16,11 +17,13 @@ class Samurai::PaymentMethod < Samurai::Base
     self.post(:retain)
   end
   
+  # Redacts sensitive information from the payment method, rendering it unusable.
   def redact
     self.post(:redact)
   end
   
-  def custom_data
+  # Retrieves JSON formatted custom data that is encoded in the custom_data attribute
+  def custom_json_data
     @custom_data ||= self.custom && (JSON.parse(self.custom) rescue {}).symbolize_keys
   end
 end
