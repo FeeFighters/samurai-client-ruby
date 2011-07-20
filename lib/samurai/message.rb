@@ -1,4 +1,4 @@
-class Samurai::Message < Samurai::Base
+class Samurai::Message < Samurai::Base # :nodoc:
   def to_xml(options = {})
     builder = options[:builder] || Builder::XmlMarkup.new(options)
     builder.tag!(:message) do

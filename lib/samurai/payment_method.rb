@@ -2,7 +2,7 @@ class Samurai::PaymentMethod < Samurai::Base
   
   include Samurai::CacheableByToken
 
-  def id
+  def id # :nodoc:
     self.token
   end
   
@@ -10,6 +10,8 @@ class Samurai::PaymentMethod < Samurai::Base
     self.payment_method_token
   end
   
+  # Retains the payment method on samurai.feefighters.com. Retain a payment method if 
+  # it will not be used immediately. 
   def retain
     self.post(:retain)
   end
