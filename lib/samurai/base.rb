@@ -5,7 +5,7 @@ rescue LoadError
 end
 class Samurai::Base < ActiveResource::Base
 
-  def self.setup_site! # ::nodoc::
+  def self.setup_site! # :nodoc:
     self.site = Samurai.site
     self.user = Samurai.merchant_key
     self.password = Samurai.merchant_password
