@@ -6,6 +6,7 @@ instead of hacking the Samurai API yourself. You'll need a merchant account
 with samurai.feefighters.com and your credentials and you'll need your
 application to track a few identifying tokens with your. 
 
+
 Installation
 ------------
 
@@ -25,6 +26,7 @@ then run:
 
     rake gems:install
 
+
 Configuration
 -------------
 
@@ -43,6 +45,7 @@ The :gateway_token param is optional. If you set it,
 `Samurai::Gateway.the_gateway` will return the gateway with this token. You
 can always call `Samurai::Gateway.find('an_arbitrary_gateway_token')` to 
 retrieve any of your gateways.
+
 
 Payment Methods
 ---------------
@@ -112,9 +115,9 @@ parameter containing the `payment_method_token`. You should save the
 
 ### Fetching a Payment Method
 
-To retrieve the payment method and ensure that it is valid: 
+To retrieve the payment method and ensure that the sensitive data is valid: 
 
-    payment_method = Samurai::PaymentMethod.find(<payment_method_token>)
+    payment_method = Samurai::PaymentMethod.find(payment_method_token)
     payment_method.is_sensitive_data_valid # => true if the credit_card[card_number] passed checksum
                                            #    and the cvv (if included) is a number of 3 or 4 digits
 
@@ -126,7 +129,7 @@ application to perform any additional validation on the payment_method.
 You can update the payment method by directly updating its properties or by 
 loading it from a set of attributes and then saving the object:
 
-    payment_method.first_name = 'John'
+    payment_method.first_name = 'Graeme'
     payment_method.save
 
 OR
@@ -148,6 +151,9 @@ removes any sensitive information from Samurai related to the payment method,
 but it still keeps the transaction data for reference. No further transactions
 can be processed on a redacted payment method. 
 
+    payment_method.redact
+
+
 Processing Transactions
 -----------------------
 
@@ -164,7 +170,7 @@ method, Samurai needs to know which of your gateways you want to use. You can
 initiate a purchase (if your gateway supports it) or an authorization against 
 a gateway by:
 
-    gateway = Samurai::Gateway # if you set Samurai.options[:gateway_token]
+    gateway = Samurai::Gateway.the_gateway # if you set Samurai.options[:gateway_token]
     gateway = Samurai::Gateway.find('a_gateway_token') # if you have multiple gateways 
     purchase = gateway.purchase(payment_method_token, amount, options)
     purchase_reference_id = purchase.reference_id # save this value, you can find the transaction with it later
@@ -186,7 +192,7 @@ You can specify options for either transaction type. Options is a hash that may 
 An authorization only puts a hold on the funds that you specified. It won't 
 capture the money. You'll need to call capture on the authorization to do this.
 
-    authorization = Samurai::Transaction.find(authorization_reference_id) # get the authorization created before
+    authorization = Samurai::Transaction.find(authorization_reference_id) # get the authorization created previously
     capture = authorization.capture # captures the full amount of the authorization
 
 ### Voiding a Transaction
@@ -195,7 +201,7 @@ A transaction that was recently created can be voided, if is has not been
 settled. A transaction that has settled has already deposited funds into your
 merchant account. 
 
-    transaction = Samurai::Transaction.find(purchase_reference_id) # gets the purchase created before, if you didn't retain it in memory
+    transaction = Samurai::Transaction.find(purchase_reference_id) # gets the purchase created before previously
     void_transaction = transaction.void # voids the transaction
 
 ### Crediting a Transaction
