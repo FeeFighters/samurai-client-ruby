@@ -1,10 +1,9 @@
 Samurai
 =======
 
-The Samurai merchant gem give you a nice set of ruby object to play with
-instead of hacking the Samurai API yourself. You'll need a merchant account 
-with samurai.feefighters.com and your credentials and you'll need your
-application to track a few identifying tokens with your. 
+If you are an online merchant and using samurai.feefighers.com, this gem will
+make your life easy. Integrate with the samuari.feefighters.com portal and 
+process transactions.
 
 
 Installation
