@@ -18,8 +18,8 @@ module Samurai
     @@options[:merchant_password]
   end
   
-  def self.gateway_token # ::nodoc::
-    @@options[:gateway_token]
+  def self.processor_token # ::nodoc::
+    @@options[:processor_token]
   end
   
   def self.options
@@ -35,7 +35,7 @@ end
 
 require 'samurai/cacheable_by_token'
 require 'samurai/base'
-require 'samurai/gateway'
+require 'samurai/processor'
 require 'samurai/payment_method'
 require 'samurai/transaction'
 require 'samurai/message'

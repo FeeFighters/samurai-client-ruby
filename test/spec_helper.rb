@@ -25,7 +25,7 @@ Samurai.options = {
   :site => SITE, 
   :merchant_key => ENV['merchant_key'] || 'e62c5a006cdd9908234193bc',
   :merchant_password => ENV['merchant_password'] || '18e87d97b3a44b56fe07497e4812f14555db69df9e6ca16f', 
-  :gateway_token => ENV['gateway_token'] || 'af762c3499f77c5f181650a7'
+  :processor_token => ENV['processor_token'] || 'af762c3499f77c5f181650a7'
 }
 
 def register_transaction_response(options)
@@ -35,7 +35,7 @@ def register_transaction_response(options)
 
   method = options[:method] && options[:method].to_sym || :post
   type = options[:type]
-  path = options[:path] || "gateways/af762c3499f77c5f181650a7/#{type}"
+  path = options[:path] || "processors/af762c3499f77c5f181650a7/#{type}"
   payment_method_token = options[:payment_method_token] || PAYMENT_METHOD_TOKEN
   amount = options[:amount] || 15.00
   success = options[:success].blank? ? true : options[:success]
@@ -47,19 +47,19 @@ def register_transaction_response(options)
     <reference_id>3dcFjTC7LDjIjTY3nkKjBVZ8qkZ</reference_id>
     <transaction_token>53VFyQKYBmN9vKfA9mHCTs79L9a</transaction_token>
     <created_at type="datetime">2011-04-22T17:57:56Z</created_at>
-    <descriptor>Custom descriptor here if your gateway supports it.</descriptor>
+    <descriptor>Custom descriptor here if your processor supports it.</descriptor>
     <custom>Any value you like.</custom>
     <transaction_type>#{type}</transaction_type>
     <amount>#{amount}</amount>
     <currency_code>USD</currency_code>
-    <gateway_token>af762c3499f77c5f181650a7</gateway_token>
-    <gateway_response>
+    <processor_token>af762c3499f77c5f181650a7</processor_token>
+    <processor_response>
       <success type="boolean">#{success}</success>
       <messages type="array">
-        <message class="error" context="gateway.avs" key="country_not_supported" />
+        <message class="error" context="processor.avs" key="country_not_supported" />
         <message class="error" context="input.cvv" key="too_short" />
       </messages>
-    </gateway_response>
+    </processor_response>
     <payment_method>
       <payment_method_token>#{payment_method_token}</payment_method_token>
         <created_at type="datetime">2011-02-12T20:20:46Z</created_at>

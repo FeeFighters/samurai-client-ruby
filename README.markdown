@@ -36,14 +36,14 @@ it. Typically this belongs in your environment.rb file or it's own initializer.
       Samurai.options = {
         :merchant_key => 'your_merchant_key', 
         :merchant_password => 'your_merchant_password', 
-        :gateway_token => 'your_default_gateway_token'
+        :processor_token => 'your_default_processor_token'
       }
     end
 
-The :gateway_token param is optional. If you set it, 
-`Samurai::Gateway.the_gateway` will return the gateway with this token. You
-can always call `Samurai::Gateway.find('an_arbitrary_gateway_token')` to 
-retrieve any of your gateways.
+The :processor_token param is optional. If you set it,
+`Samurai::Processor.the_processor` will return the processor with this token. You
+can always call `Samurai::Processor.find('an_arbitrary_processor_token')` to
+retrieve any of your processors.
 
 
 Payment Methods
@@ -57,7 +57,7 @@ in Samurai.
 To let your customers create a Payment Method, place a credit card
 entry form on your site like the one below.
 
-    <form action="https://api.ubergateway.com/v1/payment_methods" method="POST">
+    <form action="https://samurai.feefighters.com/v1/payment_methods" method="POST">
       <fieldset>
         <input name="redirect_url" type="hidden" value="http://yourdomain.com/anywhere" />
         <input name="merchant_key" type="hidden" value="[Your Merchant Key]" />
@@ -165,18 +165,18 @@ transaction.
 ### Purchases and Authorizations
 
 When you want to start to process a new purchase or authorization on a payment 
-method, Samurai needs to know which of your gateways you want to use. You can 
-initiate a purchase (if your gateway supports it) or an authorization against 
-a gateway by:
+method, Samurai needs to know which of your processors you want to use. You can
+initiate a purchase (if your processor supports it) or an authorization against
+a processor by:
 
-    gateway = Samurai::Gateway.the_gateway # if you set Samurai.options[:gateway_token]
-    gateway = Samurai::Gateway.find('a_gateway_token') # if you have multiple gateways 
-    purchase = gateway.purchase(payment_method_token, amount, options)
+    processor = Samurai::Processor.the_processor # if you set Samurai.options[:processor_token]
+    processor = Samurai::Processor.find('a_processor_token') # if you have multiple processors
+    purchase = processor.purchase(payment_method_token, amount, options)
     purchase_reference_id = purchase.reference_id # save this value, you can find the transaction with it later
     
 An authorization is created the same way: 
     
-    authorization = gateway.authorize(payment_method_token, amount, options)
+    authorization = processor.authorize(payment_method_token, amount, options)
     authorization_reference_id = authorization.reference_id # save this value, you can find the transaction with it later
 
 You can specify options for either transaction type. Options is a hash that may contain:
@@ -184,7 +184,7 @@ You can specify options for either transaction type. Options is a hash that may 
 * descriptor: a string description of the charge
 * billing_reference: a string reference for the transaction
 * customer_reference: a string that identifies the customer to your application
-* custom: a custom value that Samurai will store but not forward to the gateway
+* custom: a custom value that Samurai will store but not forward to the processor
 
 ### Capturing an Authorization
 
