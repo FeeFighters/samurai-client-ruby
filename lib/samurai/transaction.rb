@@ -9,13 +9,13 @@ class Samurai::Transaction < Samurai::Base
   alias_method :token, :id
   
   # Captures an authorization. Optionally specify an +amount+ to do a partial capture of the initial
-  # authorization. The default is to capture the full amount of the authroization.
+  # authorization. The default is to capture the full amount of the authorization.
   def capture(amount = nil, options = {})
     execute(:capture, {:amount => amount || self.amount}.reverse_merge(options))
   end
   
   # Void this transaction. If the transaction has not yet been captured and settled it can be voided to 
-  # prevent any funds from transfering. 
+  # prevent any funds from transferring.
   def void(options = {})
     execute(:void, options)
   end
@@ -35,7 +35,7 @@ class Samurai::Transaction < Samurai::Base
     Samurai::Transaction.new.load_attributes_from_response(resp)
   end
   
-  # Builds an xml payload that represents the transaction data to submit to samuari.feefighters.com
+  # Builds an xml payload that represents the transaction data to submit to samurai.feefighters.com
   def self.transaction_payload(options = {})
     {
       :amount => options[:amount],

@@ -4,7 +4,7 @@ module Samurai::CacheableByToken
   # Different caching strategies can be employed to keep the data around longer:
   #  * class variables
   #  * Rails.cache
-  #  * memecached
+  #  * memcached
   #  * redis cache
   def self.included(klass)
     klass.send :cattr_accessor, :cache
