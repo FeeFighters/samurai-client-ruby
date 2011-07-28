@@ -3,7 +3,7 @@ require File.expand_path("../lib/samurai/version", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "samurai"
-  s.version     = Samurai::VERSION
+  s.version     = Samurai::VERSION.dup
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Graeme Rouse", "Derek Zak"]
   s.email       = ["graeme@ubergateway.com", "derek@ubergateway.com"]
