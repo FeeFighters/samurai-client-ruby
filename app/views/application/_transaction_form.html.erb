@@ -1,0 +1,33 @@
+<form accept-charset="UTF-8" action="<%= url %>" class="new_transaction" id="new_transaction" method="post">
+  <%= authenticity_token if local_assigns[:authenticity_token] %>
+
+  <input id="transaction_processor_token" name="transaction[processor_token]" type="hidden" value="<%= transaction.processor_token %>"/>
+  <input id="transaction_payment_method_token" name="transaction[payment_method_token]" type="hidden" value="<%= transaction.payment_method_token %>"/>
+  <input id="transaction_custom" name="transaction[custom]" type="hidden" value="<%= transaction.custom %>" />
+  <input id="transaction_reference_id" name="transaction[reference_id]" type="hidden" value="<%= transaction.reference_id %>"/>
+
+  <div class="field">
+    <label for="transaction_transaction_type">Transaction type</label><br/>
+    <select id="transaction_transaction_type" name="transaction[transaction_type]">
+      <option value="purchase">Purchase</option>
+      <option value="authorize">Authorize Only</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="transaction_amount">Amount</label><br/>
+    <input id="transaction_amount" name="transaction[amount]" size="30" type="text"/>
+  </div>
+  <div class="field">
+    <label for="transaction_currency_code">Currency code</label><br/>
+    <input id="transaction_currency_code" name="transaction[currency_code]" size="30" type="text"/>
+  </div>
+  <div class="field">
+    <label for="transaction_descriptor">Description</label><br/>
+    <input id="transaction_descriptor" name="transaction[descriptor]" size="30" type="text"/>
+  </div>
+
+  <div class="actions">
+    <input class="button red" name="commit" type="submit" value="Submit this Transaction"/>
+  </div>
+</form>
