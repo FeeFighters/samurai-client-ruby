@@ -1,0 +1,37 @@
+<h2><%= transaction.transaction_type.titleize %> Transaction</h2>
+<h4>Reference ID: <%= transaction.reference_id %></h4>
+
+<% if transaction.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(transaction.errors.count, "error") %> prohibited this transaction from being processed:</h2>
+
+    <ul>
+    <% transaction.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<p>
+  <strong>Amount:</strong>
+  <%= transaction.amount %> (<%= transaction.currency_code %>)
+</p>
+
+<p>
+  <strong>Credit Card:</strong>
+  <em>XXXX XXXX XXXX</em> <%= transaction.payment_method.last_four_digits %>
+  (<%= "%02d" % transaction.payment_method.expiry_month %> / <%= "%04d" % transaction.payment_method.expiry_year %>)
+</p>
+
+<p><strong>Date / Time:</strong> <%= transaction.created_at %></p>
+<p>
+  <strong>Descriptor:</strong> <%= transaction.descriptor %><br>
+  <strong>Billing Reference:</strong> <%= transaction.billing_reference %><br>
+  <strong>Customer Reference: </strong> <%= transaction.customer_reference %><br>
+  <strong>Custom Data: </strong> <%= transaction.custom %><br>
+</p>
+
+<p>
+  <strong>AVS Response:</strong> <%= transaction.processor_response.avs_result_code || 'None' %>
+</p>
