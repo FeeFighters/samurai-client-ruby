@@ -26,4 +26,14 @@ class Samurai::PaymentMethod < Samurai::Base
   def custom_json_data
     @custom_data ||= self.custom && (JSON.parse(self.custom) rescue {}).symbolize_keys
   end
+
+
+  require 'pathname'
+  def self.form_html
+    File.read(form_partial_path)
+  end
+  def self.form_partial_path
+    Pathname.new(__FILE__).dirname.join('..', '..', 'app', 'views', 'application', '_payment_method_form.html.erb')
+  end
+
 end

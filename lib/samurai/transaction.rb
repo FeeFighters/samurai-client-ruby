@@ -34,7 +34,7 @@ class Samurai::Transaction < Samurai::Base
     # return the response, wrapped in a Samurai::Transaction
     Samurai::Transaction.new.load_attributes_from_response(resp)
   end
-  
+
   # Builds an xml payload that represents the transaction data to submit to samurai.feefighters.com
   def self.transaction_payload(options = {})
     {
@@ -50,5 +50,19 @@ class Samurai::Transaction < Samurai::Base
       reject{ |k,v| v.nil? }.
       to_xml(:skip_instruct => true, :root => 'transaction', :dasherize => false)
   end
-  
+
+  require 'pathname'
+  def self.form_html
+    File.read(form_partial_path)
+  end
+  def self.form_partial_path
+    Pathname.new(__FILE__).dirname.join('..', '..', 'app', 'views', 'application', '_transaction_form.html.erb')
+  end
+  def self.show_html
+    File.read(show_partial_path)
+  end
+  def self.show_partial_path
+    Pathname.new(__FILE__).dirname.join('..', '..', 'app', 'views', 'application', '_transaction.html.erb')
+  end
+
 end
