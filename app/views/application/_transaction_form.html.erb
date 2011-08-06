@@ -1,33 +1,41 @@
-<form accept-charset="UTF-8" action="<%= url %>" class="new_transaction" id="new_transaction" method="post">
-  <%= authenticity_token if local_assigns[:authenticity_token] %>
+<% authenticity_token ||= '' %>
+<form accept-charset="UTF-8" action="<%= post_url %>" class="new_transaction" id="new_transaction" method="post">
+  <%= authenticity_token %>
+  <input id="processor_token" name="processor_token" type="hidden" value="<%= processor_token %>"/>
+  <input id="payment_method_token" name="payment_method_token" type="hidden" value="<%= payment_method.payment_method_token %>"/>
+  <input id="transaction_custom" name="transaction[custom]" type="hidden" value="" />
 
-  <input id="transaction_processor_token" name="transaction[processor_token]" type="hidden" value="<%= transaction.processor_token %>"/>
-  <input id="transaction_payment_method_token" name="transaction[payment_method_token]" type="hidden" value="<%= transaction.payment_method_token %>"/>
-  <input id="transaction_custom" name="transaction[custom]" type="hidden" value="<%= transaction.custom %>" />
-  <input id="transaction_reference_id" name="transaction[reference_id]" type="hidden" value="<%= transaction.reference_id %>"/>
-
-  <div class="field">
-    <label for="transaction_transaction_type">Transaction type</label><br/>
-    <select id="transaction_transaction_type" name="transaction[transaction_type]">
+  <p>
+    <label for="transaction_type">Transaction type</label><br/>
+    <select id="transaction_type" name="transaction_type">
       <option value="purchase">Purchase</option>
       <option value="authorize">Authorize Only</option>
     </select>
-  </div>
+  </p>
 
-  <div class="field">
-    <label for="transaction_amount">Amount</label><br/>
-    <input id="transaction_amount" name="transaction[amount]" size="30" type="text"/>
-  </div>
-  <div class="field">
+  <p>
+    <label for="amount">Amount</label><br/>
+    <input id="amount" name="amount" size="30" type="text"/>
+  </p>
+  <p>
     <label for="transaction_currency_code">Currency code</label><br/>
-    <input id="transaction_currency_code" name="transaction[currency_code]" size="30" type="text"/>
-  </div>
-  <div class="field">
+    <input id="transaction_currency_code" name="transaction[currency_code]" size="30" type="text" value="US"/>
+  </p>
+  <p>
     <label for="transaction_descriptor">Description</label><br/>
     <input id="transaction_descriptor" name="transaction[descriptor]" size="30" type="text"/>
-  </div>
+  </p>
+  <p>
+    <label for="transaction_billing_reference">Billing Reference</label><br/>
+    <input id="transaction_billing_reference" name="transaction[billing_reference]" size="30" type="text"/>
+  </p>
+  <p>
+    <label for="transaction_customer_reference">Customer Reference</label><br/>
+    <input id="transaction_customer_reference" name="transaction[customer_reference]" size="30" type="text"/>
+  </p>
 
-  <div class="actions">
+
+  <p>
     <input class="button red" name="commit" type="submit" value="Submit this Transaction"/>
-  </div>
+  </p>
 </form>

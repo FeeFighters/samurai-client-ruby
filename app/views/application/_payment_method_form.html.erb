@@ -1,30 +1,63 @@
+<% sandbox ||= false %>
 <form action="<%= Samurai.site %>/payment_methods" method="POST">
   <fieldset>
     <input name="redirect_url" type="hidden" value="<%= redirect_url %>" />
     <input name="merchant_key" type="hidden" value="<%= Samurai.options[:merchant_key] %>" />
-
-    <label for="credit_card_first_name">First name</label>
-    <input id="credit_card_first_name" name="credit_card[first_name]" type="text" />
-
-    <label for="credit_card_last_name">Last name</label>
-    <input id="credit_card_last_name" name="credit_card[last_name]" type="text" />
-
-    <label for="credit_card_card_type">Card Type</label>
-    <select id="credit_card_card_type" name="credit_card[card_type]">
-      <option value="visa">Visa</option>
-      <option value="master">MasterCard</option>
-    </select>
-
-    <label for="credit_card_number">Card Number</label>
-    <input id="credit_card_number" name="credit_card[card_number]" type="text" />
-
-    <label for="credit_card_cvv">Security Code</label>
-    <input id="credit_card_cvv" name="credit_card[cvv]" type="text" />
-
-    <label for="credit_card_month">Expires on</label>
-    <input id="credit_card_month" name="credit_card[expiry_month]" type="text" />
-    <input id="credit_card_year" name="credit_card[expiry_year]" type="text" />
-
-    <button type='submit'>Submit Payment</button>
+    <input name="sandbox" type="hidden" value="<%= sandbox %>" />
   </fieldset>
+
+  <fieldset>
+    <div class="field-group">
+      <p><label for="credit_card_first_name">First name</label><br><input id="credit_card_first_name" name="credit_card[first_name]" size="30" type="text" /></p>
+      <p><label for="credit_card_last_name">Last name</label><br><input id="credit_card_last_name" name="credit_card[last_name]" size="30" type="text" /></p>
+    </div>
+
+    <p><label for="credit_card_address_1">Address 1</label><br><input class="span-6" id="credit_card_address_1" name="credit_card[address_1]" size="30" type="text" /></p>
+    <p><label for="credit_card_address_2">Address 2</label><br><input class="span-6" id="credit_card_address_2" name="credit_card[address_2]" size="30" type="text" /></p>
+
+    <div class="field-group">
+      <p><label for="credit_card_city">City</label><br><input id="credit_card_city" name="credit_card[city]" size="30" type="text" /></p>
+      <p><label for="credit_card_state">State</label><br><input class="span-2" id="credit_card_state" name="credit_card[state]" size="30" type="text" /></p>
+      <p><label for="credit_card_zip">Zip</label><br><input class="span-1" id="credit_card_zip" name="credit_card[zip]" size="30" type="text" /></p>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <h4>Card Type</h4>
+
+    <p class="highlighted-block">
+      <input id="credit_card_card_type_visa" name="credit_card[card_type]" type="radio" value="visa" /> <label class="for_radio" for="credit_card_card_type_visa">Visa</label>
+      <input id="credit_card_card_type_master" name="credit_card[card_type]" type="radio" value="master" /> <label class="for_radio" for="credit_card_card_type_master">Mastercard</label>
+    </p>
+
+    <div class="field-group">
+      <p><label for="credit_card_card_number">Card Number</label><br><input id="credit_card_card_number" name="credit_card[card_number]" size="30" type="text" /></p>
+      <p><label for="credit_card_cvv">CVV</label><br><input class="span-1" id="credit_card_cvv" name="credit_card[cvv]" size="30" type="text" /></p>
+      <p>
+        <label for="credit_card_expiry_month">Expires on</label><br>
+        <select id="credit_card_expiry_month" name="credit_card[expiry_month]"><option value="1">01</option>
+          <option value="2">02</option>
+          <option value="3">03</option>
+          <option value="4">04</option>
+          <option value="5">05</option>
+          <option value="6">06</option>
+          <option value="7">07</option>
+          <option value="8">08</option>
+          <option value="9">09</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+        </select>
+        <select id="credit_card_expiry_year" name="credit_card[expiry_year]"><option value="2011">2011</option>
+          <option value="2012">2012</option>
+          <option value="2013">2013</option>
+          <option value="2014">2014</option>
+          <option value="2015">2015</option>
+          <option value="2016">2016</option>
+        </select>
+      </p>
+    </div>
+  </fieldset>
+
+  <button type='submit' class='button blue'>Submit Payment</button>
 </form>
