@@ -26,7 +26,7 @@ class Samurai::Transaction < Samurai::Base
   def credit(amount = nil, options = {})
     execute(:credit, {:amount => amount || self.amount}.reverse_merge(options))
   end
-  
+
   private
   
   def execute(action, options = {})
@@ -34,6 +34,17 @@ class Samurai::Transaction < Samurai::Base
     # return the response, wrapped in a Samurai::Transaction
     Samurai::Transaction.new.load_attributes_from_response(resp)
   end
+
+  def process_response_errors
+    if self.processor_response && self.processor_response.messages
+      self.processor_response.messages.each do |message|
+        if message.subclass == 'error'
+          self.errors.add message.context.gsub(/\./, ' '), message.key
+        end
+      end
+    end
+  end
+  protected :process_response_errors
 
   # Builds an xml payload that represents the transaction data to submit to samurai.feefighters.com
   def self.transaction_payload(options = {})
