@@ -1,4 +1,5 @@
 <% authenticity_token ||= '' %>
+<% transaction ||= OpenStruct.new %>
 <form accept-charset="UTF-8" action="<%= post_url %>" class="new_transaction" id="new_transaction" method="post">
   <%= authenticity_token %>
   <input id="processor_token" name="processor_token" type="hidden" value="<%= processor_token %>"/>
@@ -13,29 +14,33 @@
     </select>
   </p>
 
-  <p>
-    <label for="amount">Amount</label><br/>
-    <input id="amount" name="amount" size="30" type="text"/>
-  </p>
-  <p>
-    <label for="transaction_currency_code">Currency code</label><br/>
-    <input id="transaction_currency_code" name="transaction[currency_code]" size="30" type="text" value="US"/>
-  </p>
+  <div class="field-group">
+    <p>
+      <label for="amount">Amount</label><br/>
+      <input id="amount" name="amount" size="30" type="text" value="<%= transaction.amount %>"/>
+    </p>
+    <p>
+      <label for="transaction_currency_code">Currency code</label><br/>
+      <input class="span-1" id="transaction_currency_code" name="transaction[currency_code]" size="30" type="text" value="<%= transaction.currency_code %>"/>
+    </p>
+  </div>
+
+  <div class="field-group">
+    <p>
+      <label for="transaction_billing_reference">Billing Reference</label><br/>
+      <input id="transaction_billing_reference" name="transaction[billing_reference]" size="30" type="text" value="<%= transaction.billing_reference %>"/>
+    </p>
+    <p>
+      <label for="transaction_customer_reference">Customer Reference</label><br/>
+      <input id="transaction_customer_reference" name="transaction[customer_reference]" size="30" type="text" value="<%= transaction.customer_reference %>"/>
+    </p>
+  </div>
   <p>
     <label for="transaction_descriptor">Description</label><br/>
-    <input id="transaction_descriptor" name="transaction[descriptor]" size="30" type="text"/>
-  </p>
-  <p>
-    <label for="transaction_billing_reference">Billing Reference</label><br/>
-    <input id="transaction_billing_reference" name="transaction[billing_reference]" size="30" type="text"/>
-  </p>
-  <p>
-    <label for="transaction_customer_reference">Customer Reference</label><br/>
-    <input id="transaction_customer_reference" name="transaction[customer_reference]" size="30" type="text"/>
+    <input id="transaction_descriptor" name="transaction[descriptor]" size="30" type="text" value="<%= transaction.descriptor %>"/>
   </p>
 
-
   <p>
-    <input class="button red" name="commit" type="submit" value="Submit this Transaction"/>
+    <input class="button red" name="commit" type="submit" value="Submit Transaction"/>
   </p>
 </form>
