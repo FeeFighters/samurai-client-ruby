@@ -12,6 +12,8 @@ describe "generate documentation" do
   end
 
   before do
+    @logger.begin_section example.full_description.sub(/generate documentation/, '').titleize
+
     @params = {
       'redirect_url' => 'http://test.host',
       'merchant_key' => Samurai.merchant_key,
@@ -50,12 +52,34 @@ describe "generate documentation" do
     Samurai::Base.connection
   end
 
+  after do
+    @logger.end_section
+  end
+
   describe 'with an invalid payment method' do
-    it 'should not create the payment method' do
+    it 'should not create the payment method with missing card_number' do
       @params.delete 'credit_card[card_number]'
       data = create_payment_method(@params)
       log_request_response! data[:request], data[:response]
       data[:payment_method_token].should be_nil
+    end
+
+    it 'should create the payment method with invalid card_number format' do
+      @params['credit_card[card_number]'] = '12345'
+      data = create_payment_method(@params)
+      log_request_response! data[:request], data[:response]
+      data[:payment_method_token].should =~ /^[0-9a-z]{24}$/
+      Samurai::PaymentMethod.find data[:payment_method_token]
+      log_http!
+    end
+
+    it 'should create the payment method with blank cvv' do
+      @params['credit_card[cvv]'] = ''
+      data = create_payment_method(@params)
+      log_request_response! data[:request], data[:response]
+      data[:payment_method_token].should =~ /^[0-9a-z]{24}$/
+      Samurai::PaymentMethod.find data[:payment_method_token]
+      log_http!
     end
   end
 
@@ -67,6 +91,8 @@ describe "generate documentation" do
     it 'should create the payment method' do
       log_request_response! @data[:request], @data[:response]
       @data[:payment_method_token].should =~ /^[0-9a-z]{24}$/
+      Samurai::PaymentMethod.find @data[:payment_method_token]
+      log_http!
     end
     it 'should create a valid transaction' do
       purchase = Samurai::Processor.purchase(@data[:payment_method_token], @amount)
@@ -89,6 +115,8 @@ describe "generate documentation" do
     it 'should create the payment method' do
       log_request_response! @data[:request], @data[:response]
       @data[:payment_method_token].should =~ /^[0-9a-z]{24}$/
+      Samurai::PaymentMethod.find @data[:payment_method_token]
+      log_http!
     end
     it 'should create a valid transaction' do
       purchase = Samurai::Processor.purchase(@data[:payment_method_token], @amount)
@@ -111,6 +139,8 @@ describe "generate documentation" do
     it 'should create the payment method' do
       log_request_response! @data[:request], @data[:response]
       @data[:payment_method_token].should =~ /^[0-9a-z]{24}$/
+      Samurai::PaymentMethod.find @data[:payment_method_token]
+      log_http!
     end
     it 'should create a valid transaction' do
       purchase = Samurai::Processor.purchase(@data[:payment_method_token], @amount)
@@ -125,7 +155,7 @@ describe "generate documentation" do
     end
   end
 
-  describe 'with a card with incorrect cvv' do
+  describe 'with  a card with incorrect cvv' do
     before do
       @amount = '6.00' # response code: card number is invalid
       @data = create_payment_method(@params)
@@ -133,6 +163,8 @@ describe "generate documentation" do
     it 'should create the payment method' do
       log_request_response! @data[:request], @data[:response]
       @data[:payment_method_token].should =~ /^[0-9a-z]{24}$/
+      Samurai::PaymentMethod.find @data[:payment_method_token]
+      log_http!
     end
     it 'should create a valid transaction' do
       purchase = Samurai::Processor.purchase(@data[:payment_method_token], @amount)
@@ -156,6 +188,8 @@ describe "generate documentation" do
     it 'should create the payment method' do
       log_request_response! @data[:request], @data[:response]
       @data[:payment_method_token].should =~ /^[0-9a-z]{24}$/
+      Samurai::PaymentMethod.find @data[:payment_method_token]
+      log_http!
     end
     it 'should create a valid transaction' do
       purchase = Samurai::Processor.purchase(@data[:payment_method_token], @amount)

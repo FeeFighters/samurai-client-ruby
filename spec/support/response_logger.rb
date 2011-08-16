@@ -4,27 +4,37 @@ class ResponseLogger
   include ERB::Util
 
   def initialize(io)
+    @sections = []
     @io = io
-    @io.puts "<!doctype html>"
-    @io.puts "<html>"
     @io.puts '<div class="wrapper">'
   end
 
   def close!
     @io.puts '</div>'
-    @io.puts "</html>"
+    @sections.each do |section|
+      @io.puts "<a href='##{section[:id]}'>#{section[:name]}</a><br>"
+    end
   end
 
-  def log(name, request, response)
-    @io.puts "<article class='example span-10 prepend-1'>"
+  def begin_section(name)
+    @sections << {:name=>name, :id=>h(name.parameterize)}
+    @io.puts "<article class='example span-8' id='#{h name.parameterize}'>"
     @io.puts "  <h3>#{h name}</h3>"
+  end
+
+  def end_section
+    @io.puts "</article>"
+    @io.puts "<hr>"
+  end
+
+  def log(request, response, options={})
     @io.puts '  <div class="code http-request"><em class="lang">HTTP Request</em>'
-    @io.puts "    <pre>#{h request[:method].to_s.upcase} #{h request[:path]}</pre>"
+    @io.puts "    <pre><strong>#{h request[:method].to_s.upcase} #{h request[:path]}</strong><br>"
+    @io.puts "Headers: #{h request[:headers].inject({}) {|h, (k,v)| h[k] = (v.is_a?(Array) ? v.first : v); h }}</pre>"
     @io.puts '  </div>'
-    @io.puts "  <p class='headers'>#{h request[:headers]}</p>"
     if request[:body]
       @io.puts '  <div class="code xml">'
-      @io.puts '    <em class="lang">XML</em>'
+      @io.puts '    <em class="lang">XML Payload</em>'
       @io.puts "    <pre class='prettyprint lang-xml'>#{h request[:body]}</pre>"
       @io.puts '  </div>'
     end
@@ -32,20 +42,18 @@ class ResponseLogger
     @io.puts "    <em class='lang'>HTTP Response: #{h response.code}</em>"
     @io.puts "    <pre class='prettyprint lang-xml'><code>#{h response.body}</code></pre>"
     @io.puts "  </div>"
-    @io.puts "</article>"
-    @io.puts "<hr>"
   end
 
 end
 
 module ResponseLoggerHelper
-  def log_http!
-    @logger.log example.full_description.sub(/generate documentation/, '').titleize,
-                Samurai::Base.connection.http.request,
-                Samurai::Base.connection.http.response
+  def log_http! options={}
+    @logger.log Samurai::Base.connection.http.request,
+                Samurai::Base.connection.http.response,
+                options
   end
 
-  def log_request_response! request, response
+  def log_request_response! request, response, options={}
     def request.[](v)
       case v
       when :method
@@ -58,7 +66,6 @@ module ResponseLoggerHelper
         super
       end
     end
-    @logger.log example.full_description.sub(/generate documentation/, '').titleize,
-                request, response
+    @logger.log request, response, options
   end
 end
