@@ -26,6 +26,12 @@ describe "processing purchases" do
     reverse.processor_response.success.should be_true
   end
 
+  it "should be able to reverse a settled purchase" do
+    pending "currently we cannot force settle a purchase, so can't test this properly"
+    reverse = @purchase.reverse
+    reverse.processor_response.success.should be_true
+  end
+
   it "should be able to credit a settled purchase" do
     pending "currently we cannot force settle a purchase, so can't test this properly" do
       credit = @purchase.credit
