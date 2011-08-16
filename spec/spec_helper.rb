@@ -1,9 +1,12 @@
 require 'rspec'
 require 'ruby-debug'
+require 'pp'
 Debugger.start
 Debugger.settings[:autoeval] = true
 Debugger.settings[:autolist] = 5
 Debugger.settings[:reload_source_on_change] = true
+
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 SITE = ENV['site'] || 'https://samurai.feefighters.com/v1/'
 USE_MOCK = !ENV['site']
