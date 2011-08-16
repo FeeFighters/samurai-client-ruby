@@ -1,24 +1,23 @@
 require 'spec_helper'
 
 describe "Processor actions" do
-  
+  before :each do
+    @payment_method_token = PAYMENT_METHOD_TOKENS[:success]
+  end
+
   it "should return an empty processor" do
     processor = Samurai::Processor.the_processor
     processor.should_not be_nil
   end
   
   it "should create a new purchase" do
-    register_transaction_response(:type => 'purchase')
-    
-    purchase = Samurai::Processor.purchase(PAYMENT_METHOD_TOKEN, @@seed)
+    purchase = Samurai::Processor.purchase(@payment_method_token, @@seed)
     purchase.processor_response.success.should be_true
     # FakeWeb.last_request
   end
 
   it "should create a new purchase with tracking data" do
-    register_transaction_response(:type => 'purchase')
-    
-    purchase = Samurai::Processor.purchase(PAYMENT_METHOD_TOKEN, @@seed, {
+    purchase = Samurai::Processor.purchase(@payment_method_token, @@seed, {
       :descriptor => "A test purchase", 
       :custom => "some optional custom data",
       :billing_reference => "ABC123",
@@ -29,8 +28,7 @@ describe "Processor actions" do
   end
     
   it "should create a non-new authorization" do
-    register_transaction_response(:type => 'authorize')
-    authorization = Samurai::Processor.authorize(PAYMENT_METHOD_TOKEN, @@seed)
+    authorization = Samurai::Processor.authorize(@payment_method_token, @@seed)
     authorization.processor_response.success.should be_true
   end
   
