@@ -27,6 +27,14 @@ class Samurai::Transaction < Samurai::Base
     execute(:credit, {:amount => amount || self.amount}.reverse_merge(options))
   end
 
+  # Reverse this transaction.  First, tries a void.
+  # If a void is unsuccessful, (because the transaction has already settled) perform a credit for the full amount.
+  def reverse(options = {})
+    transaction = void(options)
+    return transaction if transaction.processor_response.success
+    return credit(nil, options)
+  end
+
   private
   
   def execute(action, options = {})
