@@ -35,6 +35,13 @@ class Samurai::Transaction < Samurai::Base
     return credit(nil, options)
   end
 
+  def success?
+    respond_to?(:processor_response) && processor_response.success
+  end
+  def failed?
+    !successful?
+  end
+
   private
   
   def execute(action, options = {})
