@@ -30,7 +30,14 @@ module Samurai
     @@options = (value || {}).reverse_merge(DEFAULT_OPTIONS)
     Samurai::Base.setup_site!
   end
-  
+
+  def self.errors_html
+    File.read(errors_partial_path)
+  end
+  def self.errors_partial_path
+    Pathname.new(__FILE__).dirname.join('..', 'app', 'views', 'application', '_errors.html.erb')
+  end
+
 end
 
 require 'samurai/cacheable_by_token'

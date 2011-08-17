@@ -1,5 +1,5 @@
 <% authenticity_token ||= '' %>
-<% transaction ||= OpenStruct.new %>
+<% transaction ||= Samurai::Transaction.new %>
 <form accept-charset="UTF-8" action="<%= post_url %>" class="new_transaction" id="new_transaction" method="post">
   <%= authenticity_token %>
   <input id="processor_token" name="processor_token" type="hidden" value="<%= processor_token %>"/>

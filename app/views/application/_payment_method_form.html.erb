@@ -1,5 +1,5 @@
 <% sandbox ||= false %>
-<% payment_method ||= OpenStruct.new %>
+<% payment_method ||= Samurai::PaymentMethod.new %>
 <form action="<%= Samurai.site %>/payment_methods" method="POST">
   <fieldset>
     <input name="redirect_url" type="hidden" value="<%= redirect_url %>" />
