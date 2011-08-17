@@ -70,6 +70,17 @@ class Samurai::Transaction < Samurai::Base
       to_xml(:skip_instruct => true, :root => 'transaction', :dasherize => false)
   end
 
+  # Initialize the known attributes from the schema as empty strings, so that they can be accessed via method-missing
+  KNOWN_ATTRIBUTES = [
+    :amount, :type, :payment_method_token, :currency_code,
+    :descriptor, :custom, :customer_reference, :billing_reference
+  ]
+  EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject({}) {|h, k| h[k] = ''; h}
+  def initialize(attrs={})
+    super(EMPTY_ATTRIBUTES.merge(attrs))
+  end
+
+
   require 'pathname'
   def self.form_html
     File.read(form_partial_path)

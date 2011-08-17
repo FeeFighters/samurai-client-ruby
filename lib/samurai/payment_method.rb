@@ -38,12 +38,35 @@ class Samurai::PaymentMethod < Samurai::Base
   end
   protected :process_response_errors
 
+  # Initialize the known attributes from the schema as empty strings, so that they can be accessed via method-missing
+  KNOWN_ATTRIBUTES = [
+    :first_name, :last_name, :address_1, :address_2, :city, :state, :zip,
+    :card_number, :cvv, :expiry_month, :expiry_year
+  ]
+  EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject({}) {|h, k| h[k] = ''; h}
+  def initialize(attrs={})
+    super(EMPTY_ATTRIBUTES.merge(attrs))
+  end
+
+  # Prepare a new PaymentMethod for use with a transparent redirect form
+  def self.for_transparent_redirect(params)
+    if params[:payment_method_token].blank?
+      Samurai::PaymentMethod.new(params)
+    else
+      Samurai::PaymentMethod.find(params[:payment_method_token]).tap do |pm|
+        pm.card_number = "************#{pm.last_four_digits}"
+        pm.cvv = "***"
+        pm.errors[:base] << 'The card number or CVV are not valid.' if !pm.is_sensitive_data_valid
+      end
+    end
+  end
+
   require 'pathname'
   def self.form_html
     File.read(form_partial_path)
   end
   def self.form_partial_path
-    Pathname.new(__FILE__).dirname.join('..', '..', 'app', 'views', 'application', '_payment_method_form.html.erb')
+    Pathname.new(__FILE__).dirname.join('..', '..', 'app', 'views', 'application', '_payment_method_form.html.erb').to_s
   end
 
 end
