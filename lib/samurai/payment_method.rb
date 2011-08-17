@@ -27,6 +27,16 @@ class Samurai::PaymentMethod < Samurai::Base
     @custom_data ||= self.custom && (JSON.parse(self.custom) rescue {}).symbolize_keys
   end
 
+  def process_response_errors
+    if self.messages
+      self.messages.each do |message|
+        #if (message.respond_to?(:subclass) && message.subclass == 'error')
+          self.errors.add message.context.gsub(/\./, ' '), message.key
+        #end
+      end
+    end
+  end
+  protected :process_response_errors
 
   require 'pathname'
   def self.form_html
