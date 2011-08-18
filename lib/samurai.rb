@@ -40,4 +40,5 @@ require 'samurai/payment_method'
 require 'samurai/transaction'
 require 'samurai/message'
 require 'samurai/processor_response'
-require 'samurai/views'
+
+require 'samurai/rails'
