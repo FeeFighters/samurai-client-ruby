@@ -39,7 +39,7 @@ class Samurai::Transaction < Samurai::Base
     respond_to?(:processor_response) && processor_response.success
   end
   def failed?
-    !successful?
+    !success?
   end
 
   private

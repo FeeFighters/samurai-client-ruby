@@ -28,7 +28,7 @@ class Samurai::PaymentMethod < Samurai::Base
   end
 
   def process_response_errors
-    if self.messages
+    if respond_to?(:messages) && self.messages
       self.messages.each do |message|
         #if (message.respond_to?(:subclass) && message.subclass == 'error')
           self.errors.add message.context.gsub(/\./, ' '), message.key
