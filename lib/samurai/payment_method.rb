@@ -61,12 +61,4 @@ class Samurai::PaymentMethod < Samurai::Base
     end
   end
 
-  require 'pathname'
-  def self.form_html
-    File.read(form_partial_path)
-  end
-  def self.form_partial_path
-    Pathname.new(__FILE__).dirname.join('..', '..', 'app', 'views', 'application', '_payment_method_form.html.erb').to_s
-  end
-
 end

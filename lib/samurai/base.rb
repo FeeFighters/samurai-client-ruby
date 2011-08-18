@@ -11,6 +11,10 @@ class Samurai::Base < ActiveResource::Base
     self.password = Samurai.merchant_password
   end
 
+  def has_errors?
+    respond_to?(:errors) && !errors.empty?
+  end
+
   protected
 
   def load_attributes_from_response(response)

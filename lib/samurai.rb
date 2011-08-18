@@ -31,13 +31,6 @@ module Samurai
     Samurai::Base.setup_site!
   end
 
-  def self.errors_html
-    File.read(errors_partial_path)
-  end
-  def self.errors_partial_path
-    Pathname.new(__FILE__).dirname.join('..', 'app', 'views', 'application', '_errors.html.erb')
-  end
-
 end
 
 require 'samurai/cacheable_by_token'
@@ -47,3 +40,4 @@ require 'samurai/payment_method'
 require 'samurai/transaction'
 require 'samurai/message'
 require 'samurai/processor_response'
+require 'samurai/views'

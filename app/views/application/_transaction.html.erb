@@ -1,7 +1,7 @@
 <h3><%= transaction.errors.empty? ? 'Successful' : 'Failed' %> <%= transaction.transaction_type.titleize %> Transaction</h3>
 <h4>Reference ID: <%= transaction.reference_id %></h4>
 
-<%= render :file=>Samurai.errors_partial_path, :locals=>{:transaction=>transaction} %>
+<%= render Samurai::Views.errors :transaction=>transaction %>
 
 <p>
   <strong>Amount:</strong>
