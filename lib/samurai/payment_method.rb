@@ -43,7 +43,7 @@ class Samurai::PaymentMethod < Samurai::Base
     :first_name, :last_name, :address_1, :address_2, :city, :state, :zip,
     :card_number, :cvv, :expiry_month, :expiry_year
   ]
-  EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject({}) {|h, k| h[k] = ''; h}
+  EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject(ActiveSupport::HashWithIndifferentAccess.new) {|h, k| h[k] = ''; h}
   def initialize(attrs={})
     super(EMPTY_ATTRIBUTES.merge(attrs))
   end
