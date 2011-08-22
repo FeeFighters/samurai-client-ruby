@@ -1,0 +1,42 @@
+.samurai fieldset {
+  border: none;
+}
+
+    .samurai span {
+      float: left;
+      margin:  0 6px 15px 0;
+    }
+
+    .samurai label {
+      display:  block;
+      font-family: sans-serif;
+      font-weight: bold;
+      line-height:  1.5;
+
+    }
+
+    .samurai .field-group {
+      overflow:  hidden;
+
+    }
+
+    .samurai .field-group div {
+      margin-bottom:  15px;
+    }
+
+    .samurai input {
+      padding: 5px;
+      width: 310px;
+    }
+
+    .samurai #credit_card_name_group input {
+      width:  145px;
+    }
+
+    .samurai #credit_card_card_number{
+      width:  240px;
+    }
+
+    .samurai #credit_card_cvv {
+      width:  50px;
+    }
