@@ -1,5 +1,5 @@
 <% sandbox ||= false %>
-<% payment_method ||= Samurai::PaymentMethod.new %>
+<% payment_method ||= (@payment_method || Samurai::PaymentMethod.new) %>
 <form action="<%= Samurai.site %>/payment_methods" method="POST" class="samurai payment_method">
   <fieldset>
     <input name="redirect_url" type="hidden" value="<%= redirect_url %>" />
