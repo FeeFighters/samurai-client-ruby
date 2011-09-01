@@ -1,15 +1,15 @@
 <% transaction ||= (@transaction || Samurai::Transaction.new) %>
 <% payment_method ||= (@payment_method || Samurai::PaymentMethod.new) %>
-<% if transaction.errors.any? || payment_method.errors.any? %>
+<% if transaction.has_errors? || payment_method.has_errors? %>
   <div id="error_explanation">
     <h4>This transaction could not be processed:</h4>
     <ul>
     <% transaction.errors.full_messages.each do |msg| %>
       <li><%= msg %></li>
-    <% end %>
+    <% end if transaction.has_errors? %>
     <% payment_method.errors.full_messages.each do |msg| %>
       <li><%= msg %></li>
-    <% end %>
+    <% end if payment_method.has_errors? %>
     </ul>
   </div>
 <% end %>

@@ -1,28 +1,29 @@
 <% transaction ||= @transaction %>
-<h3><%= transaction.errors.empty? ? 'Successful' : 'Failed' %> <%= transaction.transaction_type.titleize %> Transaction</h3>
-<h4>Reference ID: <%= transaction.reference_id %></h4>
+<% if transaction %><h3><%= transaction.has_errors? ? 'Failed' : 'Successful' %> <%= transaction.transaction_type.titleize %></h3><% end %>
 
-<%= render Samurai::Views.errors :transaction=>transaction %>
+<%= @errors || render(Samurai::Rails::Views.errors) %>
 
-<p>
-  <strong>Amount:</strong>
-  <%= transaction.amount %> (<%= transaction.currency_code %>)
-</p>
+<% if transaction %>
+  <p>
+    <strong>Amount:</strong>
+    <%= transaction.amount %> (<%= transaction.currency_code %>)
+  </p>
 
-<p>
-  <strong>Credit Card:</strong>
-  <em>XXXX XXXX XXXX</em> <%= transaction.payment_method.last_four_digits %>
-  (<%= "%02d" % transaction.payment_method.expiry_month %> / <%= "%04d" % transaction.payment_method.expiry_year %>)
-</p>
+  <p>
+    <strong>Credit Card:</strong>
+    <em>XXXX XXXX XXXX</em> <%= transaction.payment_method.last_four_digits %>
+    (<%= "%02d" % transaction.payment_method.expiry_month %> / <%= "%04d" % transaction.payment_method.expiry_year %>)
+  </p>
 
-<p><strong>Date / Time:</strong> <%= transaction.created_at %></p>
-<p>
-  <strong>Descriptor:</strong> <%= transaction.descriptor %><br>
-  <strong>Billing Reference:</strong> <%= transaction.billing_reference %><br>
-  <strong>Customer Reference: </strong> <%= transaction.customer_reference %><br>
-  <strong>Custom Data: </strong> <%= transaction.custom %><br>
-</p>
+  <p><strong>Date / Time:</strong> <%= transaction.created_at %></p>
+  <p>
+    <strong>Descriptor:</strong> <%= transaction.descriptor %><br>
+    <strong>Billing Reference:</strong> <%= transaction.billing_reference %><br>
+    <strong>Customer Reference: </strong> <%= transaction.customer_reference %><br>
+    <strong>Custom Data: </strong> <%= transaction.custom %><br>
+  </p>
 
-<p>
-  <strong>AVS Response:</strong> <%= transaction.processor_response.avs_result_code || 'None' %>
-</p>
+  <p>
+    <strong>AVS Response:</strong> <%= transaction.processor_response.try(:avs_result_code) || 'None' %>
+  </p>
+<% end %>

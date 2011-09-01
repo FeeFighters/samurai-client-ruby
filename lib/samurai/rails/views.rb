@@ -15,7 +15,7 @@ module Samurai::Rails
           Pathname.new(__FILE__).dirname.join('../../..', 'app', 'views', 'application', "_#{partial}.html.erb").to_s
         end
         define_method "#{partial}_html" do
-          File.read(send partial)
+          File.read send("#{partial}_file")
         end
       end
 
