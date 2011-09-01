@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    samurai (0.2.9)
+    samurai (0.2.10)
       activeresource (>= 2.2.2)
 
 GEM
