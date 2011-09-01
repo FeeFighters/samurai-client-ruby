@@ -4,6 +4,7 @@ rescue LoadError
   require 'activeresource' # for older versions of activeresource
 end
 class Samurai::Base < ActiveResource::Base
+  self.format = ActiveResource::Formats::XmlFormat
 
   def self.setup_site! # :nodoc:
     self.site = Samurai.site
