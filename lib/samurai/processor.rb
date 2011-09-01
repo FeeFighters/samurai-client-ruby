@@ -47,10 +47,20 @@ class Samurai::Processor < Samurai::Base
   
   def execute(action, options = {})
     transaction = Samurai::Transaction.transaction_payload(options)
-    # send a purchase request
-    resp = post(action, {}, transaction)
-    # return the response, wrapped in a Samurai::Transaction
-    Samurai::Transaction.new.load_attributes_from_response(resp)
+    begin
+      # send a purchase request
+      resp = post(action, {}, transaction)
+      # return the response, wrapped in a Samurai::Transaction
+      Samurai::Transaction.new.load_attributes_from_response(resp)
+    rescue ActiveResource::BadRequest=>e
+      # initialize a fresh transaction with the give options, add a generic error to it, and return it
+      Samurai::Transaction.new(options.merge(:transaction_type=>action.to_s)).tap do |transaction|
+        transaction.payment_method = Samurai::PaymentMethod.find options[:payment_method_token]
+        transaction.created_at = Time.now
+        transaction.processor_response = nil
+        transaction.errors[:base] << "Invalid request."
+      end
+    end
   end
   
 end

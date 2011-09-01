@@ -45,9 +45,18 @@ class Samurai::Transaction < Samurai::Base
   private
   
   def execute(action, options = {})
-    resp = post(action, {}, self.class.transaction_payload(options))
-    # return the response, wrapped in a Samurai::Transaction
-    Samurai::Transaction.new.load_attributes_from_response(resp)
+    begin
+      resp = post(action, {}, self.class.transaction_payload(options))
+      # return the response, wrapped in a Samurai::Transaction
+      Samurai::Transaction.new.load_attributes_from_response(resp)
+    rescue ActiveResource::BadRequest=>e
+      # initialize a fresh transaction with the give options, add a generic error to it, and return it
+      Samurai::Transaction.new(options.merge(:transaction_type=>action.to_s)).tap do |transaction|
+        transaction.created_at = Time.now
+        transaction.processor_response = nil
+        transaction.errors[:base] << "Invalid request."
+      end
+    end
   end
 
   def process_response_errors
@@ -85,21 +94,6 @@ class Samurai::Transaction < Samurai::Base
   EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject(ActiveSupport::HashWithIndifferentAccess.new) {|h, k| h[k] = ''; h}
   def initialize(attrs={})
     super(EMPTY_ATTRIBUTES.merge(attrs))
-  end
-
-
-  require 'pathname'
-  def self.form_html
-    File.read(form_partial_path)
-  end
-  def self.form_partial_path
-    Pathname.new(__FILE__).dirname.join('..', '..', 'app', 'views', 'application', '_transaction_form.html.erb')
-  end
-  def self.show_html
-    File.read(show_partial_path)
-  end
-  def self.show_partial_path
-    Pathname.new(__FILE__).dirname.join('..', '..', 'app', 'views', 'application', '_transaction.html.erb')
   end
 
 end
