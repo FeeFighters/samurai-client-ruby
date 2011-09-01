@@ -48,10 +48,14 @@ class Samurai::Processor < Samurai::Base
   def execute(action, options = {})
     transaction = Samurai::Transaction.transaction_payload(options)
     begin
+      @persisted = true # keep AR 3.1 from using the new_ resource path
+
       # send a purchase request
       resp = post(action, {}, transaction)
+
       # return the response, wrapped in a Samurai::Transaction
       Samurai::Transaction.new.load_attributes_from_response(resp)
+
     rescue ActiveResource::BadRequest=>e
       # initialize a fresh transaction with the give options, add a generic error to it, and return it
       Samurai::Transaction.new(options.merge(:transaction_type=>action.to_s)).tap do |transaction|

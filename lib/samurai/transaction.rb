@@ -86,14 +86,22 @@ class Samurai::Transaction < Samurai::Base
       to_xml(:skip_instruct => true, :root => 'transaction', :dasherize => false)
   end
 
-  # Initialize the known attributes from the schema as empty strings, so that they can be accessed via method-missing
   KNOWN_ATTRIBUTES = [
     :amount, :type, :payment_method_token, :currency_code,
-    :descriptor, :custom, :customer_reference, :billing_reference
+    :descriptor, :custom, :customer_reference, :billing_reference, :processor_response
   ]
-  EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject(ActiveSupport::HashWithIndifferentAccess.new) {|h, k| h[k] = ''; h}
-  def initialize(attrs={})
-    super(EMPTY_ATTRIBUTES.merge(attrs))
+  if ActiveResource::VERSION::MAJOR <= 3 && ActiveResource::VERSION::MINOR < 1
+    # If we're using ActiveResource pre-3.1, there's no schema class method, so we resort to some tricks...
+    # Initialize the known attributes from the schema as empty strings, so that they can be accessed via method-missing
+    EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject(ActiveSupport::HashWithIndifferentAccess.new) {|h, k| h[k] = ''; h}
+    def initialize(attrs={})
+      super(EMPTY_ATTRIBUTES.merge(attrs))
+    end
+  else
+    # Post AR 3.1, we can use the schema method to define our attributes
+    schema do
+      string *KNOWN_ATTRIBUTES
+    end
   end
 
 end

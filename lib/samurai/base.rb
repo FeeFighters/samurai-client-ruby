@@ -19,7 +19,9 @@ class Samurai::Base < ActiveResource::Base
   protected
 
   def load_attributes_from_response(response)
-    super.tap { |instance| instance.process_response_errors }
+    super
+    process_response_errors
+    self
   end
   def self.instantiate_record(record, prefix_options = {})
     super.tap { |instance| instance.send :process_response_errors }

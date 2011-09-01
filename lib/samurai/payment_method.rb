@@ -38,14 +38,22 @@ class Samurai::PaymentMethod < Samurai::Base
   end
   protected :process_response_errors
 
-  # Initialize the known attributes from the schema as empty strings, so that they can be accessed via method-missing
   KNOWN_ATTRIBUTES = [
     :first_name, :last_name, :address_1, :address_2, :city, :state, :zip,
     :card_number, :cvv, :expiry_month, :expiry_year
   ]
-  EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject(ActiveSupport::HashWithIndifferentAccess.new) {|h, k| h[k] = ''; h}
-  def initialize(attrs={})
-    super(EMPTY_ATTRIBUTES.merge(attrs))
+  if ActiveResource::VERSION::MAJOR <= 3 && ActiveResource::VERSION::MINOR < 1
+    # If we're using ActiveResource pre-3.1, there's no schema class method, so we resort to some tricks...
+    # Initialize the known attributes from the schema as empty strings, so that they can be accessed via method-missing
+    EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject(ActiveSupport::HashWithIndifferentAccess.new) {|h, k| h[k] = ''; h}
+    def initialize(attrs={})
+      super(EMPTY_ATTRIBUTES.merge(attrs))
+    end
+  else
+    # Post AR 3.1, we can use the schema method to define our attributes
+    schema do
+      string *KNOWN_ATTRIBUTES
+    end
   end
 
   # Prepare a new PaymentMethod for use with a transparent redirect form
