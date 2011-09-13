@@ -8,7 +8,7 @@ Debugger.settings[:reload_source_on_change] = true
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
-SITE = ENV['site'] || 'https://samurai.feefighters.com/v1/'
+SITE = ENV['site'] || 'https://api.samurai.feefighters.com/v1/'
 USE_MOCK = !ENV['site']
 
 PAYMENT_METHOD_TOKENS = {

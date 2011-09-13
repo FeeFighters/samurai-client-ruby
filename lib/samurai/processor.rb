@@ -21,7 +21,7 @@ class Samurai::Processor < Samurai::Base
   # +amount+:: amount to authorize
   # options:: an optional has of additional values to pass in accepted values are:
   # *+descriptor+:: descriptor for the transaction
-  # *+custom+:: custom data, this data does not get passed to the processor, it is stored within samurai.feefighters.com only
+  # *+custom+:: custom data, this data does not get passed to the processor, it is stored within api.samurai.feefighters.com only
   # *+customer_reference+:: an identifier for the customer, this will appear in the processor if supported
   # *+billing_reference::+ an identifier for the purchase, this will appear in the processor if supported
   # Returns a Samurai::Transaction containing the processor's response.
@@ -35,7 +35,7 @@ class Samurai::Processor < Samurai::Base
   # +amount+:: amount to authorize
   # options:: an optional has of additional values to pass in accepted values are:
   # *+descriptor+:: descriptor for the transaction
-  # *+custom+:: custom data, this data does not get passed to the processor, it is stored within samurai.feefighters.com only
+  # *+custom+:: custom data, this data does not get passed to the processor, it is stored within api.samurai.feefighters.com only
   # *+customer_reference+:: an identifier for the customer, this will appear in the processor if supported
   # *+billing_reference::+ an identifier for the purchase, this will appear in the processor if supported
   # Returns a Samurai::Transaction containing the processor's response.

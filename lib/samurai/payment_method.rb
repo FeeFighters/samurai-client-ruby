@@ -11,7 +11,7 @@ class Samurai::PaymentMethod < Samurai::Base
     self.payment_method_token
   end
   
-  # Retains the payment method on samurai.feefighters.com. Retain a payment method if 
+  # Retains the payment method on api.samurai.feefighters.com. Retain a payment method if
   # it will not be used immediately. 
   def retain
     self.post(:retain)

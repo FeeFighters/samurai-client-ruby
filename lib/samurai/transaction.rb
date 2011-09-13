@@ -70,7 +70,7 @@ class Samurai::Transaction < Samurai::Base
   end
   protected :process_response_errors
 
-  # Builds an xml payload that represents the transaction data to submit to samurai.feefighters.com
+  # Builds an xml payload that represents the transaction data to submit to api.samurai.feefighters.com
   def self.transaction_payload(options = {})
     {
       :amount => options[:amount],

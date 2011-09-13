@@ -2,7 +2,7 @@
 # Copyright:: Copyright (c) 2011 Arizona Bay, LLC
 
 module Samurai
-  SITE = 'https://samurai.feefighters.com/v1/'
+  SITE = 'https://api.samurai.feefighters.com/v1/'
   DEFAULT_OPTIONS = {:site => SITE}
 
   # Gets the provider site that the gem is configured to hit
