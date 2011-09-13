@@ -2,7 +2,7 @@ Samurai
 =======
 
 If you are an online merchant and using FeeFighters' Samurai gateway, this gem will
-make your life easy. Integrate with the http://feefighters.com/samurai portal and 
+make your life easy. Integrate with the samurai.feefighters.com portal and
 process transactions.
 
 
