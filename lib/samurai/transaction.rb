@@ -90,10 +90,10 @@ class Samurai::Transaction < Samurai::Base
     :amount, :type, :payment_method_token, :currency_code,
     :descriptor, :custom, :customer_reference, :billing_reference, :processor_response
   ]
-  if ActiveResource::VERSION::MAJOR <= 3 && ActiveResource::VERSION::MINOR < 1
+  if [ActiveResource::VERSION::MAJOR, ActiveResource::VERSION::MINOR].compact.join('.').to_f < 3.1
     # If we're using ActiveResource pre-3.1, there's no schema class method, so we resort to some tricks...
     # Initialize the known attributes from the schema as empty strings, so that they can be accessed via method-missing
-    EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject(ActiveSupport::HashWithIndifferentAccess.new) {|h, k| h[k] = ''; h}
+    EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject(HashWithIndifferentAccess.new) {|h, k| h[k] = ''; h}
     def initialize(attrs={})
       super(EMPTY_ATTRIBUTES.merge(attrs))
     end
