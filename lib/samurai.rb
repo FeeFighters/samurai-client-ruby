@@ -56,7 +56,11 @@ module ActiveResource
         is_chunked = response["Transfer-Encoding"] == "chunked"
 
         if has_body && (has_content_length || is_chunked)
-          load(self.class.format.decode(response.body), true)
+          if [ActiveResource::VERSION::MAJOR, ActiveResource::VERSION::MINOR].compact.join('.').to_f < 3
+            load(self.class.format.decode(response.body))
+          else
+            load(self.class.format.decode(response.body), true)
+          end
           @persisted = true
         end
       end
