@@ -4,7 +4,7 @@ module Samurai::Rails
   class Views
     class << self
 
-      PARTIALS = [ 'payment_method_form', 'transaction_form', 'errors', 'transaction' ]
+      PARTIALS = [ 'payment_form', 'errors', 'transaction' ]
 
       PARTIALS.each do |partial|
         define_method partial do |attrs|
