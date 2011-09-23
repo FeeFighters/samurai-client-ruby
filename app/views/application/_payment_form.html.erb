@@ -15,60 +15,62 @@
 
   <fieldset>
     <div class="field-group" id="credit_card_name_group">
-      <span>
+      <div>
         <label for="credit_card_first_name">First name</label>
         <input id="credit_card_first_name" name="credit_card[first_name]" size="30" type="text" value="<%= payment_method.first_name %>" />
-      </span>
-      <span>
+      </div>
+      <div>
         <label for="credit_card_last_name">Last name</label>
         <input id="credit_card_last_name" name="credit_card[last_name]" size="30" type="text" value="<%= payment_method.last_name %>" />
-      </span>
+      </div>
     </div>
 
     <div class="field-group" id="credit_card_address_group">
       <div>
         <label for="credit_card_address_1">Address 1</label>
-        <input class="" id="credit_card_address_1" name="credit_card[address_1]" size="30" type="text" value="<%= payment_method.address_1 %>" />
+        <input class="div-6" id="credit_card_address_1" name="credit_card[address_1]" size="30" type="text" value="<%= payment_method.address_1 %>" />
       </div>
       <div>
         <label for="credit_card_address_2">Address 2</label>
-        <input class="" id="credit_card_address_2" name="credit_card[address_2]" size="30" type="text" value="<%= payment_method.address_2 %>" />
+        <input class="div-6" id="credit_card_address_2" name="credit_card[address_2]" size="30" type="text" value="<%= payment_method.address_2 %>" />
       </div>
     </div>
 
     <div class="field-group" id="location_group">
-      <span>
+      <div>
         <label for="credit_card_city">City</label>
         <input id="credit_card_city" name="credit_card[city]" size="30" type="text" value="<%= payment_method.city %>" />
-      </span>
-      <span>
+      </div>
+      <div>
         <label for="credit_card_state">State</label>
         <input class="" id="credit_card_state" name="credit_card[state]" size="30" type="text" value="<%= payment_method.state %>" />
-      </span>
-      <span>
+      </div>
+      <div>
         <label for="credit_card_zip">Zip</label>
         <input class="" id="credit_card_zip" name="credit_card[zip]" size="30" type="text" value="<%= payment_method.zip %>" />
-      </span>
+      </div>
     </div>
   </fieldset>
 
   <fieldset>
     <div class="field-group" id="credit_card_info_group">
-      <span>
+      <div>
         <label for="credit_card_card_number">Card Number</label>
-        <input id="credit_card_card_number" name="credit_card[card_number]" size="30" type="text" value="<%= payment_method.card_number %>" />
-        <label data-samurai="card_previews">
+        <input id="credit_card_card_number" name="credit_card[card_number]" size="30" type="text" value="<%= payment_method.card_number %>" autocomplete="off" />
+        <label data-samurai-card-previews class="show-accepted">
           <span class='visa'></span>
           <span class='mastercard'></span>
           <span class='amex'></span>
           <span class='discover'></span>
         </label>
-      </span>
-      <span>
+      </div>
+      <div id="samurai_card_cvv">
         <label for="credit_card_cvv">CVV</label>
-        <input class="" id="credit_card_cvv" name="credit_card[cvv]" size="30" type="text" value="<%= payment_method.cvv %>" />
-      </span>
-      <span>
+        <input class="div-1" id="credit_card_cvv" name="credit_card[cvv]" size="30" type="text" value="<%= payment_method.cvv %>" autocomplete="off" />
+      </div>
+    </div>
+    <div class="field-group" id="credit_card_expiration">
+      <div>
         <label for="credit_card_expiry_month">Expires on</label>
         <select id="credit_card_expiry_month" name="credit_card[expiry_month]">
           <option value="1" <%= 'selected' if payment_method.expiry_month.to_s=='1' %>>01</option>
@@ -92,9 +94,11 @@
           <option value="2015" <%= 'selected' if payment_method.expiry_year.to_s=='2015' %>>2015</option>
           <option value="2016" <%= 'selected' if payment_method.expiry_year.to_s=='2016' %>>2016</option>
         </select>
-      </span>
+      </div>
     </div>
   </fieldset>
 
-  <p><button type='submit' class='button blue'>Submit Payment</button></p>
+  <button type='submit' class='button'>Submit Payment</button>
+  <span class='loading' style="display: none;"></span>
+  <span class='results' style="display: none;"></span>
 </form>
