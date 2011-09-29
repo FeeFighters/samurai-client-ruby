@@ -48,8 +48,8 @@ end
 
 module ResponseLoggerHelper
   def log_http! options={}
-    @logger.log Samurai::Base.connection.http.request,
-                Samurai::Base.connection.http.response,
+    @logger.log Samurai::Base.connection.send(:http).request,
+                Samurai::Base.connection.send(:http).response,
                 options
   end
 

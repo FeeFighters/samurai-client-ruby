@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe "generate documentation" do
-  include TransparentRedirectHelper
   include ResponseLoggerHelper
 
   before(:all) do
@@ -61,7 +60,9 @@ describe "generate documentation" do
       @params.delete 'credit_card[card_number]'
       data = create_payment_method(@params)
       log_request_response! data[:request], data[:response]
-      data[:payment_method_token].should be_nil
+      data[:payment_method_token].should =~ /^[0-9a-z]{24}$/
+      Samurai::PaymentMethod.find data[:payment_method_token]
+      log_http!
     end
 
     it 'should create the payment method with invalid card_number format' do
@@ -99,12 +100,6 @@ describe "generate documentation" do
       log_http!
       purchase.processor_response.success.should be_true
     end    
-    it 'should create an invalid transaction' do
-      lambda do
-        Samurai::Processor.purchase(@data[:payment_method_token], '')
-      end.should raise_error(ActiveResource::ServerError)
-      log_http!
-    end
   end
 
   describe 'with a declined card' do
@@ -122,12 +117,6 @@ describe "generate documentation" do
       purchase = Samurai::Processor.purchase(@data[:payment_method_token], @amount)
       log_http!
       purchase.processor_response.success.should be_false
-    end
-    it 'should create an invalid transaction' do
-      lambda do
-        Samurai::Processor.purchase(@data[:payment_method_token], '')
-      end.should raise_error(ActiveResource::ServerError)
-      log_http!
     end
   end
 
@@ -147,12 +136,6 @@ describe "generate documentation" do
       log_http!
       purchase.processor_response.success.should be_false
     end
-    it 'should create an invalid transaction' do
-      lambda do
-        Samurai::Processor.purchase(@data[:payment_method_token], '')
-      end.should raise_error(ActiveResource::ServerError)
-      log_http!
-    end
   end
 
   describe 'with  a card with incorrect cvv' do
@@ -170,12 +153,6 @@ describe "generate documentation" do
       purchase = Samurai::Processor.purchase(@data[:payment_method_token], @amount)
       log_http!
       purchase.processor_response.success.should be_false
-    end
-    it 'should create an invalid transaction' do
-      lambda do
-        Samurai::Processor.purchase(@data[:payment_method_token], '')
-      end.should raise_error(ActiveResource::ServerError)
-      log_http!
     end
   end
 
@@ -195,12 +172,6 @@ describe "generate documentation" do
       purchase = Samurai::Processor.purchase(@data[:payment_method_token], @amount)
       log_http!
       purchase.processor_response.success.should be_false
-    end
-    it 'should create an invalid transaction' do
-      lambda do
-        Samurai::Processor.purchase(@data[:payment_method_token], '')
-      end.should raise_error(ActiveResource::ServerError)
-      log_http!
     end
   end
 

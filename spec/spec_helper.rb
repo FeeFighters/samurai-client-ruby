@@ -11,26 +11,23 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 SITE = ENV['site'] || 'https://api.samurai.feefighters.com/v1/'
 USE_MOCK = !ENV['site']
 
-PAYMENT_METHOD_TOKENS = {
-  :success => 'b7c966452702282b32a4c65d'
-}
-
 RSpec.configure do |c|
-  c.before :all do
-    @seed = rand(1000).to_f / 100.0
-  end
   c.before :each do
-    @seed += 1.0
-    ActiveResource::Base.logger.info self.example.description
+    @seed = next_seed
+    ActiveResource::Base.logger.info "---------------------------------------------"
+    ActiveResource::Base.logger.info "--- " + self.example.description
+    ActiveResource::Base.logger.info "---------------------------------------------"
   end
+  c.include TransparentRedirectHelper
+  c.include TransactionSeed
 end
 
 require 'samurai'
 Samurai.options = {
   :site => SITE, 
-  :merchant_key => ENV['merchant_key'] || 'f4b17359f267915e705fdcb6',
-  :merchant_password => ENV['merchant_password'] || 'd7bf19a8aa1051335b83b349',
-  :processor_token => ENV['processor_token'] || 'c5823b5f1616ed6c0891d167'
+  :merchant_key => ENV['merchant_key'] || 'a1ebafb6da5238fb8a3ac9f6',
+  :merchant_password => ENV['merchant_password'] || 'ae1aa640f6b735c4730fbb56',
+  :processor_token => ENV['processor_token'] || '69ac9c704329bb067d427bf0'
 }
 
 

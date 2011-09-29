@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "processing authorizations" do
   
   before :each do
-    payment_method_token = PAYMENT_METHOD_TOKENS[:success]
+    payment_method_token = create_payment_method(default_payment_method_params)[:payment_method_token]
     @authorization = Samurai::Processor.authorize(payment_method_token, @seed)
   end
   
@@ -28,8 +28,8 @@ describe "processing authorizations" do
   end
 
   it "should partially capture an authorization" do
-    capture = @authorization.capture(@seed - 1.0)
-    capture.amount.intern.should be_equal "#{@seed - 1.0}".intern
+    capture = @authorization.capture(@seed - BigDecimal('1.0'))
+    capture.amount.intern.should be_equal "#{@seed - BigDecimal('1.0')}".intern
     capture.processor_response.success.should be_true
   end
 
@@ -47,8 +47,8 @@ describe "processing authorizations" do
   end
 
   it "should partially credit an authorization" do
-    credit = @authorization.credit(@seed - 1.0)
-    credit.amount.intern.should be_equal "#{@seed - 1.0}".intern
+    credit = @authorization.credit(@seed - BigDecimal('1.0'))
+    credit.amount.intern.should be_equal "#{@seed - BigDecimal('1.0')}".intern
     pending "the response is not successful since the authorization hasn't settled" do
       credit.processor_response.success.should be_true
     end
