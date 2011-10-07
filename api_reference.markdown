@@ -50,59 +50,59 @@ end
 #### In your view:
 
 ```ruby
-&lt;%= render Samurai::Rails::Views.errors %&gt;
-&lt;%= render Samurai::Rails::Views.payment_form :redirect_url => <mark>your_redirect_url</mark>,
-                                              :sandbox => true %&gt;
+<%= render Samurai::Rails::Views.errors %>
+<%= render Samurai::Rails::Views.payment_form :redirect_url => <mark>your_redirect_url</mark>,
+                                              :sandbox => true %>
 ```
 
 
 Here’s an example of the form that will be added to your view.  Key fields are highlighted in bold text, the style and labels are yours to configure however you like.
 
 ```html
-&lt;form action=&quot;https://api.samurai.feefighters.com/v1/payment_methods&quot; method=&quot;POST&quot;&gt;
-  &lt;fieldset&gt;
-    &lt;input name=&quot;redirect_url&quot; type=&quot;hidden&quot; value=&quot;http://yourdomain.com/anywhere&quot; /&gt;
-    &lt;input name=&quot;merchant_key&quot; type=&quot;hidden&quot; value=&quot;&lt;%= merchant_key %&gt;&quot; /&gt;
-    &lt;input name=&quot;sandbox&quot; type=&quot;hidden&quot; value=&quot;true&quot; /&gt;
+<form action="https://api.samurai.feefighters.com/v1/payment_methods" method="POST">
+  <fieldset>
+    <input name="redirect_url" type="hidden" value="http://yourdomain.com/anywhere" />
+    <input name="merchant_key" type="hidden" value="<%= merchant_key %>" />
+    <input name="sandbox" type="hidden" value="true" />
 
-    &lt;!-- Before populating the ‘custom’ parameter, remember to escape reserved characters
-         like &lt;, &gt; and &amp; into their safe counterparts like &amp;lt;, &amp;gt; and &amp;amp; --&gt;
-    &lt;input name="custom" type="hidden" value="Any value you want us to save with this payment method" /&gt;
+    <!-- Before populating the ‘custom’ parameter, remember to escape reserved characters
+         like <, > and & into their safe counterparts like &lt;, &gt; and &amp; -->
+    <input name="custom" type="hidden" value="Any value you want us to save with this payment method" />
 
-    &lt;label for=&quot;credit_card_first_name&quot;&gt;First name&lt;/label&gt;
-    &lt;input id=&quot;credit_card_first_name&quot; name=&quot;credit_card[first_name]&quot; type=&quot;text&quot; /&gt;
+    <label for="credit_card_first_name">First name</label>
+    <input id="credit_card_first_name" name="credit_card[first_name]" type="text" />
 
-    &lt;label for=&quot;credit_card_last_name&quot;&gt;Last name&lt;/label&gt;
-    &lt;input id=&quot;credit_card_last_name&quot; name=&quot;credit_card[last_name]&quot; type=&quot;text&quot; /&gt;
+    <label for="credit_card_last_name">Last name</label>
+    <input id="credit_card_last_name" name="credit_card[last_name]" type="text" />
 
-    &lt;label for=&quot;credit_card_address_1&quot;&gt;Address 1&lt;/label&gt;
-    &lt;input id=&quot;credit_card_address_1&quot; name=&quot;credit_card[address_1]&quot; type=&quot;text&quot; /&gt;
+    <label for="credit_card_address_1">Address 1</label>
+    <input id="credit_card_address_1" name="credit_card[address_1]" type="text" />
 
-    &lt;label for=&quot;credit_card_address_2&quot;&gt;Address 2&lt;/label&gt;
-    &lt;input id=&quot;credit_card_address_2&quot; name=&quot;credit_card[address_2]&quot; type=&quot;text&quot; /&gt;
+    <label for="credit_card_address_2">Address 2</label>
+    <input id="credit_card_address_2" name="credit_card[address_2]" type="text" />
 
-    &lt;label for=&quot;credit_card_city&quot;&gt;City&lt;/label&gt;
-    &lt;input id=&quot;credit_card_city&quot; name=&quot;credit_card[city]&quot; type=&quot;text&quot; /&gt;
+    <label for="credit_card_city">City</label>
+    <input id="credit_card_city" name="credit_card[city]" type="text" />
 
-    &lt;label for=&quot;credit_card_state&quot;&gt;State&lt;/label&gt;
-    &lt;input id=&quot;credit_card_state&quot; name=&quot;credit_card[state]&quot; type=&quot;text&quot; /&gt;
+    <label for="credit_card_state">State</label>
+    <input id="credit_card_state" name="credit_card[state]" type="text" />
 
-    &lt;label for=&quot;credit_card_zip&quot;&gt;Zip&lt;/label&gt;
-    &lt;input id=&quot;credit_card_zip&quot; name=&quot;credit_card[zip]&quot; type=&quot;text&quot; /&gt;
+    <label for="credit_card_zip">Zip</label>
+    <input id="credit_card_zip" name="credit_card[zip]" type="text" />
 
-    &lt;label for=&quot;credit_card_number&quot;&gt;Card Number&lt;/label&gt;
-    &lt;input id=&quot;credit_card_number&quot; name=&quot;credit_card[card_number]&quot; type=&quot;text&quot; /&gt;
+    <label for="credit_card_number">Card Number</label>
+    <input id="credit_card_number" name="credit_card[card_number]" type="text" />
 
-    &lt;label for=&quot;credit_card_verification_value&quot;&gt;Security Code&lt;/label&gt;
-    &lt;input id=&quot;credit_card_verification_value&quot; name=&quot;credit_card[cvv]&quot; type=&quot;text&quot; /&gt;
+    <label for="credit_card_verification_value">Security Code</label>
+    <input id="credit_card_verification_value" name="credit_card[cvv]" type="text" />
 
-    &lt;label for=&quot;credit_card_month&quot;&gt;Expires on&lt;/label&gt;
-    &lt;input id=&quot;credit_card_month&quot; name=&quot;credit_card[expiry_month]&quot; type=&quot;text&quot; /&gt;
-    &lt;input id=&quot;credit_card_year&quot; name=&quot;credit_card[expiry_year]&quot; type=&quot;text&quot; /&gt;
+    <label for="credit_card_month">Expires on</label>
+    <input id="credit_card_month" name="credit_card[expiry_month]" type="text" />
+    <input id="credit_card_year" name="credit_card[expiry_year]" type="text" />
 
-    &lt;button type='submit'&gt;Submit Payment&lt;/button&gt;
-  &lt;/fieldset&gt;
-&lt;/form&gt;
+    <button type='submit'>Submit Payment</button>
+  </fieldset>
+</form>
 ```
 
 When we return the user to the URL that you specified in the `redirect_url` field, we’ll append the new Payment Method Token to the query string. You should save the Payment Method Token and use it from this point forward.
