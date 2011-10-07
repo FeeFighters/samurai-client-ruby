@@ -137,7 +137,12 @@ We’ll only send you non-sensitive data, so you will no be able to pre-populate
 
 ```ruby
 @payment_method = Samurai::PaymentMethod.find params[:payment_method_token]
+@payment_method.is_sensitive_data_valid # => true if the credit_card[card_number] passed checksum
+                                        #    and the cvv (if included) is a number of 3 or 4 digits
 ```
+
+**NOTE:** Samurai will not validate any non-sensitive data so it is up to your
+application to perform any additional validation on the payment_method.
 
 
 ### Retaining a Payment Method
@@ -208,7 +213,8 @@ See the [purchase transaction](#processing-payments-simple) documentation for de
 You can only execute a capture on a transaction that has previously been authorized.  You’ll need the Transaction Token value from your Authorize command to construct the URL to use for capturing it.
 
 ```ruby
-capture = @authorization.capture(100.0)
+authorization = Samurai::Transaction.find(transaction_token)  # get the authorization created previously
+capture = @authorization.capture  # capture the full amount (or specify an optional amount)
 ```
 
 ### Void
@@ -218,7 +224,8 @@ You can only execute a void on a transaction that has previously been captured o
 **A transaction can only be voided if it has not settled yet.** Settlement typically takes 24 hours, but it depends on the processor connection you are using. For this reason, it is often convenient to use the [Reverse](#reverse) instead.
 
 ```ruby
-void = @authorization.void
+transaction = Samurai::Transaction.find(transaction_token) # get the transaction
+void = transaction.void
 ```
 
 ### Credit
@@ -228,17 +235,19 @@ You can only execute a credit on a transaction that has previously been captured
 **A transaction can only be credited if it has settled.** Settlement typically takes 24 hours, but it depends on the processor connection you are using. For this reason, it is often convenient to use the [Reverse](#reverse) instead.
 
 ```ruby
-credit = @authorization.credit(100.0)
+transaction = Samurai::Transaction.find(transaction_token) # get the transaction
+credit = transaction.credit  # credit the full amount (or specify an optional amount)
 ```
 
-### Credit
+### Reverse
 
 You can only execute a reverse on a transaction that has previously been captured or purchased.  You’ll need the Transaction Token value from your Authorize command to construct the URL to use for reversing it.
 
 *A reverse is equivalent to a void, followed by a full-value credit if the void is unsuccessful.*
 
 ```ruby
-reverse = @authorization.reverse
+transaction = Samurai::Transaction.find(transaction_token) # get the transaction
+reverse = transaction.reverse
 ```
 
 
