@@ -10,7 +10,6 @@ To use the Samurai API, you'll need a <mark>Merchant Key</mark>, <mark>Merchant 
 [Sign up for an account](https://samurai.feefighters.com/users/sign_up) to get started.
 
 
-
 ### Samurai Credentials
 
 Once you have these credentials, you can add them to an initializer in your Rails app (or anywhere after requiring the gem in a Sinatra/plain-ol'-ruby app):
@@ -18,10 +17,9 @@ Once you have these credentials, you can add them to an initializer in your Rail
 ```ruby
 require 'samurai'
 Samurai.options = {
-  :site => SITE,
-  :merchant_key => '<mark>[merchant_key]</mark>',
-  :merchant_password => '<mark>[merchant_password]</mark>',
-  :processor_token => '<mark>[processor_token]</mark>',
+  :merchant_key => '[merchant_key]',
+  :merchant_password => '[merchant_password]',
+  :processor_token => '[processor_token]',
 }
 ```
 
@@ -51,7 +49,7 @@ end
 
 ```ruby
 <%= render Samurai::Rails::Views.errors %>
-<%= render Samurai::Rails::Views.payment_form :redirect_url => <mark>your_redirect_url</mark>,
+<%= render Samurai::Rails::Views.payment_form :redirect_url => your_redirect_url,
                                               :sandbox => true %>
 ```
 
@@ -62,7 +60,7 @@ Here’s an example of the form that will be added to your view.  Key fields are
 <form action="https://api.samurai.feefighters.com/v1/payment_methods" method="POST">
   <fieldset>
     <input name="redirect_url" type="hidden" value="http://yourdomain.com/anywhere" />
-    <input name="merchant_key" type="hidden" value="<%= merchant_key %>" />
+    <input name="merchant_key" type="hidden" value="[merchant_key]" />
     <input name="sandbox" type="hidden" value="true" />
 
     <!-- Before populating the ‘custom’ parameter, remember to escape reserved characters
@@ -213,8 +211,8 @@ See the [purchase transaction](#processing-payments-simple) documentation for de
 You can only execute a capture on a transaction that has previously been authorized.  You’ll need the Transaction Token value from your Authorize command to construct the URL to use for capturing it.
 
 ```ruby
-authorization = Samurai::Transaction.find(transaction_token)  # get the authorization created previously
-capture = @authorization.capture  # capture the full amount (or specify an optional amount)
+@authorization = Samurai::Transaction.find(transaction_token)  # get the authorization created previously
+@capture = @authorization.capture  # capture the full amount (or specify an optional amount)
 ```
 
 ### Void
@@ -224,8 +222,8 @@ You can only execute a void on a transaction that has previously been captured o
 **A transaction can only be voided if it has not settled yet.** Settlement typically takes 24 hours, but it depends on the processor connection you are using. For this reason, it is often convenient to use the [Reverse](#reverse) instead.
 
 ```ruby
-transaction = Samurai::Transaction.find(transaction_token) # get the transaction
-void = transaction.void
+@transaction = Samurai::Transaction.find(transaction_token) # get the transaction
+@void = @transaction.void
 ```
 
 ### Credit
@@ -235,8 +233,8 @@ You can only execute a credit on a transaction that has previously been captured
 **A transaction can only be credited if it has settled.** Settlement typically takes 24 hours, but it depends on the processor connection you are using. For this reason, it is often convenient to use the [Reverse](#reverse) instead.
 
 ```ruby
-transaction = Samurai::Transaction.find(transaction_token) # get the transaction
-credit = transaction.credit  # credit the full amount (or specify an optional amount)
+@transaction = Samurai::Transaction.find(transaction_token) # get the transaction
+@credit = @transaction.credit  # credit the full amount (or specify an optional amount)
 ```
 
 ### Reverse
@@ -246,8 +244,8 @@ You can only execute a reverse on a transaction that has previously been capture
 *A reverse is equivalent to a void, followed by a full-value credit if the void is unsuccessful.*
 
 ```ruby
-transaction = Samurai::Transaction.find(transaction_token) # get the transaction
-reverse = transaction.reverse
+@transaction = Samurai::Transaction.find(transaction_token) # get the transaction
+@reverse = @transaction.reverse
 ```
 
 
