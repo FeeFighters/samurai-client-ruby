@@ -4,7 +4,7 @@ describe "processing purchases" do
 
   before :each do
     payment_method_token = create_payment_method(default_payment_method_params)[:payment_method_token]
-    @purchase = Samurai::Processor.purchase(payment_method_token, @seed)
+    @purchase = Samurai::Processor.purchase(payment_method_token, 1.0, :billing_reference=>rand(1000))
   end
   
   it "should process successfully" do

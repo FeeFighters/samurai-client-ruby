@@ -4,7 +4,7 @@ describe "processing authorizations" do
   
   before :each do
     payment_method_token = create_payment_method(default_payment_method_params)[:payment_method_token]
-    @authorization = Samurai::Processor.authorize(payment_method_token, @seed)
+    @authorization = Samurai::Processor.authorize(payment_method_token, 1.0, :billing_reference=>rand(1000))
   end
   
   it "should create a new authorization transaction" do
@@ -17,19 +17,19 @@ describe "processing authorizations" do
   end
 
   it "should successfully capture" do
-    capture = @authorization.capture(@seed)
+    capture = @authorization.capture(1.0)
     capture.processor_response.success.should be_true
   end
   
   it "should capture an authorization without specifying an amount" do
     capture = @authorization.capture
-    capture.amount.intern.should be_equal "#{@seed}".intern
+    capture.amount.intern.should be_equal "#{1.0}".intern
     capture.processor_response.success.should be_true
   end
 
   it "should partially capture an authorization" do
-    capture = @authorization.capture(@seed - BigDecimal('1.0'))
-    capture.amount.intern.should be_equal "#{@seed - BigDecimal('1.0')}".intern
+    capture = @authorization.capture(1.0 - BigDecimal('0.5'))
+    capture.amount.intern.should be_equal "#{1.0 - BigDecimal('0.5')}".intern
     capture.processor_response.success.should be_true
   end
 
@@ -40,15 +40,15 @@ describe "processing authorizations" do
 
   it "should credit an authorization for the full amount by default" do
     credit = @authorization.credit
-    credit.amount.intern.should be_equal "#{@seed}".intern
+    credit.amount.intern.should be_equal "#{1.0}".intern
     pending "the response is not successful since the authorization hasn't settled" do
       credit.processor_response.success.should be_true
     end
   end
 
   it "should partially credit an authorization" do
-    credit = @authorization.credit(@seed - BigDecimal('1.0'))
-    credit.amount.intern.should be_equal "#{@seed - BigDecimal('1.0')}".intern
+    credit = @authorization.credit(1.0 - BigDecimal('0.5'))
+    credit.amount.intern.should be_equal "#{1.0 - BigDecimal('0.5')}".intern
     pending "the response is not successful since the authorization hasn't settled" do
       credit.processor_response.success.should be_true
     end
