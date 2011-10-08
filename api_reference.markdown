@@ -90,11 +90,11 @@ Here’s an example of the form that will be added to your view.  Key fields are
     <label for="credit_card_zip">Zip</label>
     <input id="credit_card_zip" name="credit_card[zip]" type="text" />
 
-    <label for="credit_card_number">Card Number</label>
-    <input id="credit_card_number" name="credit_card[card_number]" type="text" />
+    <label for="credit_card_card_number">Card Number</label>
+    <input id="credit_card_card_number" name="credit_card[card_number]" type="text" />
 
-    <label for="credit_card_verification_value">Security Code</label>
-    <input id="credit_card_verification_value" name="credit_card[cvv]" type="text" />
+    <label for="credit_card_cvv">Security Code</label>
+    <input id="credit_card_cvv" name="credit_card[cvv]" type="text" />
 
     <label for="credit_card_month">Expires on</label>
     <input id="credit_card_month" name="credit_card[expiry_month]" type="text" />
