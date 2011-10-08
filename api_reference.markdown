@@ -29,7 +29,7 @@ Samurai.options = {
 
 Each time a user stores their billing information in the Samurai system, we call it a <mark>Payment Method</mark>.
 
-Our <a href="/transparent-redirect">transparent redirect</a> uses a simple HTML form on your website that submits your user’s billing information directly to us over SSL so that you never have to worry about handling credit card data yourself. We’ll quickly store the sensitive information, tokenize it for you and return the user to a page on your website of your choice with the new <mark>Payment Method Token</mark>.
+Our [transparent redirect](https://samurai.feefighters.com/transparent-redirect) uses a simple HTML form on your website that submits your user’s billing information directly to us over SSL so that you never have to worry about handling credit card data yourself. We’ll quickly store the sensitive information, tokenize it for you and return the user to a page on your website of your choice with the new <mark>Payment Method Token</mark>.
 
 From that point forward, you always refer to the Payment Method Token anytime you’d like to use that billing information for anything.
 
@@ -40,6 +40,8 @@ The Samurai ruby gem makes setting up a transparent redirect form extremely simp
 #### In your controller:
 
 ```ruby
+include Samurai::Rails::Helpers
+
 def payment_form
   setup_for_transparent_redirect(params)
 end
@@ -152,6 +154,7 @@ Once you have determined that you’d like to keep a Payment Method in the Samur
 However, if you perform a purchase or authorize transaction with a Payment Method, it will be automatically retained for future use.
 
 ```ruby
+@payment_method = Samurai::PaymentMethod.find params[:payment_method_token]
 @payment_method.retain
 ```
 
@@ -160,6 +163,7 @@ However, if you perform a purchase or authorize transaction with a Payment Metho
 It’s important that you redact payment methods whenever you know you won’t need them anymore.  Typically this is after the credit card’s expiration date or when your user has supplied you with a different card to use.
 
 ```ruby
+@payment_method = Samurai::PaymentMethod.find params[:payment_method_token]
 @payment_method.redact
 ```
 
@@ -264,7 +268,7 @@ Each time you use one of the transaction processing functions (purchase, authori
 
 We don't typically recommend using our server-to-server API for creating/updating Payment Methods, because it requires credit card data to pass through your server and exposes you to a much greater PCI compliance & risk liability.
 
-However, there are situations where using the server-to-server API is appropriate, such as integrating a server that is already PCI-secure with Samurai or if you need to perform complex transactions and don't mind bearing the burden of greater complaince and risk.
+However, there are situations where using the server-to-server API is appropriate, such as integrating a server that is already PCI-secure with Samurai or if you need to perform complex transactions and don't mind bearing the burden of greater compliance and risk.
 
 
 ### Creating a Payment Method (S2S)
@@ -281,9 +285,19 @@ _Documentation coming soon._
 
 ## Error Messages
 
-_Documentation coming soon._
+The PaymentMethod and Transaction classes both load errors automatically from the Samurai API, adding them to an Errors class that uses the same API as an ActiveRecord model.
 
+```ruby
+@transaction = Samurai::Transaction.find reference_id
+puts @transaction.errors.full_messages
+puts @transaction.payment_method.errors.full_messages
+```
 
+Displaying these error messages in your payment form is simple, using the included Rails helper module:
+
+```ruby
+<%= render Samurai::Rails::Views.errors %>
+```
 
 
 
