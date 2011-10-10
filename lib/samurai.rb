@@ -1,4 +1,4 @@
-# Samurai::Base
+# Samurai Gem
 # -----------------
 
 # Core Samurai Module
