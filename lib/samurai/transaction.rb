@@ -1,14 +1,18 @@
+# Samurai::Transaction
+# -----------------
+
+# This class represents a Samurai Transaction
+# It can be used to query Transactions & capture/void/credit/reverse
 class Samurai::Transaction < Samurai::Base
-  
   include Samurai::CacheableByToken
   
-  # Alias for transaction_token
-  def id # :nodoc:
+  # Alias for `transaction_token`
+  def id
     transaction_token
   end
   alias_method :token, :id
   
-  # Captures an authorization. Optionally specify an +amount+ to do a partial capture of the initial
+  # Captures an authorization. Optionally specify an `amount` to do a partial capture of the initial
   # authorization. The default is to capture the full amount of the authorization.
   def capture(amount = nil, options = {})
     execute(:capture, {:amount => amount || self.amount}.reverse_merge(options))
@@ -21,7 +25,7 @@ class Samurai::Transaction < Samurai::Base
   end
   
   # Create a credit or refund against the original transaction.
-  # Optionally accepts an +amount+ to credit, the default is to credit the full 
+  # Optionally accepts an `amount` to credit, the default is to credit the full
   # value of the original amount
   def credit(amount = nil, options = {})
     execute(:credit, {:amount => amount || self.amount}.reverse_merge(options))
@@ -43,7 +47,8 @@ class Samurai::Transaction < Samurai::Base
   end
 
   private
-  
+
+  # Make the actual ActiveResource POST request, process the response
   def execute(action, options = {})
     begin
       resp = post(action, {}, self.class.transaction_payload(options))
@@ -59,6 +64,8 @@ class Samurai::Transaction < Samurai::Base
     end
   end
 
+  # Override base error processing with specific Transaction behavior
+  # Examine the `<processor_response><messages>` array, and add an error to the Errors object for each `<message>`
   def process_response_errors
     if self.processor_response && self.processor_response.messages
       self.processor_response.messages.each do |message|
@@ -86,6 +93,7 @@ class Samurai::Transaction < Samurai::Base
       to_xml(:skip_instruct => true, :root => 'transaction', :dasherize => false)
   end
 
+  # Setup the Transaction schema for ActiveResource, so that new objects contain empty attributes
   KNOWN_ATTRIBUTES = [
     :amount, :type, :payment_method_token, :currency_code,
     :descriptor, :custom, :customer_reference, :billing_reference, :processor_response

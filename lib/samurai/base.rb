@@ -3,10 +3,16 @@ begin
 rescue LoadError
   require 'activeresource' # for older versions of activeresource
 end
+
+# Samurai::Base
+# -----------------
+
+# Base class that all Samurai ActiveResource models inherit from
+# Provides some common error-handling functionality, as well as the AR site settings
 class Samurai::Base < ActiveResource::Base
   self.format = ActiveResource::Formats::XmlFormat
 
-  def self.setup_site! # :nodoc:
+  def self.setup_site!
     self.site = Samurai.site
     self.user = Samurai.merchant_key
     self.password = Samurai.merchant_password

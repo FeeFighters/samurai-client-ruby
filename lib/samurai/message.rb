@@ -1,4 +1,9 @@
-class Samurai::Message < Samurai::Base # :nodoc:
+# Samurai::Message
+# -----------------
+
+# Simple class for serializing Samurai <message> responses
+class Samurai::Message < Samurai::Base
+
   def to_xml(options = {})
     builder = options[:builder] || Builder::XmlMarkup.new(options)
     builder.tag!(:message) do
@@ -7,4 +12,5 @@ class Samurai::Message < Samurai::Base # :nodoc:
       end
     end
   end
+
 end

@@ -1,3 +1,8 @@
+# Samurai::Processor
+# -----------------
+
+# This class represents a Samurai Processor connection
+# It can be used to create purchase & authorize transactions
 class Samurai::Processor < Samurai::Base
   
   # Returns the default processor specified by Samurai.processor_token if you passed it into Samurai.setup_site.
@@ -17,34 +22,40 @@ class Samurai::Processor < Samurai::Base
   
   # Convenience method to authorize and capture a payment_method for a particular amount in one transaction.
   # Parameters:
-  # +payment_method_token+:: token identifying the payment method to authorize
-  # +amount+:: amount to authorize
-  # options:: an optional has of additional values to pass in accepted values are:
-  # *+descriptor+:: descriptor for the transaction
-  # *+custom+:: custom data, this data does not get passed to the processor, it is stored within api.samurai.feefighters.com only
-  # *+customer_reference+:: an identifier for the customer, this will appear in the processor if supported
-  # *+billing_reference::+ an identifier for the purchase, this will appear in the processor if supported
+  #
+  # * `payment_method_token`: token identifying the payment method to authorize
+  # * `amount`: amount to authorize
+  # * `options`: an optional has of additional values to pass in accepted values are:
+  #   * `descriptor`: descriptor for the transaction
+  #   * `custom`: custom data, this data does not get passed to the processor, it is stored within `api.samurai.feefighters.com` only
+  #   * `customer_reference`: an identifier for the customer, this will appear in the processor if supported
+  #   * `billing_reference`: an identifier for the purchase, this will appear in the processor if supported
+  #
   # Returns a Samurai::Transaction containing the processor's response.
   def purchase(payment_method_token, amount, options = {})
     execute(:purchase, options.merge(:payment_method_token => payment_method_token, :amount => amount))
   end
 
-  # Authorize a payment_method for a particular amount. 
+  # Authorize a payment_method for a particular amount.
   # Parameters:
-  # +payment_method_token+:: token identifying the payment method to authorize
-  # +amount+:: amount to authorize
-  # options:: an optional has of additional values to pass in accepted values are:
-  # *+descriptor+:: descriptor for the transaction
-  # *+custom+:: custom data, this data does not get passed to the processor, it is stored within api.samurai.feefighters.com only
-  # *+customer_reference+:: an identifier for the customer, this will appear in the processor if supported
-  # *+billing_reference::+ an identifier for the purchase, this will appear in the processor if supported
+  #
+  # * `payment_method_token`: token identifying the payment method to authorize
+  # * `amount`: amount to authorize
+  #
+  # * options: an optional has of additional values to pass in accepted values are:
+  #   * `descriptor`: descriptor for the transaction
+  #   * `custom`: custom data, this data does not get passed to the processor, it is stored within api.samurai.feefighters.com only
+  #   * `customer_reference`: an identifier for the customer, this will appear in the processor if supported
+  #   * `billing_reference`: an identifier for the purchase, this will appear in the processor if supported
+  #
   # Returns a Samurai::Transaction containing the processor's response.
   def authorize(payment_method_token, amount, options = {})
     execute(:authorize, options.merge(:payment_method_token => payment_method_token, :amount => amount))
   end
   
   private
-  
+
+  # Make the actual ActiveResource POST request, process the response
   def execute(action, options = {})
     transaction = Samurai::Transaction.transaction_payload(options)
     begin

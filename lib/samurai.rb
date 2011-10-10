@@ -1,6 +1,19 @@
-# Author::    Graeme Rouse
-# Copyright:: Copyright (c) 2011 Arizona Bay, LLC
+# Samurai::Base
+# -----------------
 
+# Core Samurai Module
+# Contains accessors for the important Samurai configuration settings
+#
+# To configure the Samurai gem:
+#
+# ```ruby
+# require 'samurai'
+# Samurai.options = {
+#   :merchant_key => 'a1ebafb6da5238fb8a3ac9f6',
+#   :merchant_password => 'ae1aa640f6b735c4730fbb56',
+#   :processor_token => '69ac9c704329bb067d427bf0'
+# }
+# ```
 module Samurai
   SITE = 'https://api.samurai.feefighters.com/v1/'
   DEFAULT_OPTIONS = {:site => SITE}
@@ -33,6 +46,7 @@ module Samurai
 
 end
 
+# Require each of the samurai components
 require 'samurai/cacheable_by_token'
 require 'samurai/base'
 require 'samurai/processor'
@@ -40,7 +54,6 @@ require 'samurai/payment_method'
 require 'samurai/transaction'
 require 'samurai/message'
 require 'samurai/processor_response'
-
 require 'samurai/rails'
 
 

@@ -1,7 +1,13 @@
+# Samurai::CacheableByToken
+# -----------------
+
+# Module for enabling caching of ActiveResource classes by token
+# Essentially functions as a simple Identity Map
 module Samurai::CacheableByToken
   
   # The default cache stores the values for the duration of the request
   # Different caching strategies can be employed to keep the data around longer:
+  #
   #  * class variables
   #  * Rails.cache
   #  * memcached
@@ -13,7 +19,7 @@ module Samurai::CacheableByToken
   end
   
   module ClassExtensions
-    # Override the ActiveResource +find+ method to query the cache before hitting the provider.
+    # Override the ActiveResource `find` method to query the cache before hitting the provider.
     def find(*arguments)
       token = arguments.first
       if token.is_a?(String) && self.cache[token]
@@ -27,7 +33,7 @@ module Samurai::CacheableByToken
     end
   end
   
-  # Overrides the ActiveResource +save+ method to update the current
+  # Overrides the ActiveResource `save` method to update the current
   # model in the cache
   def save
     super

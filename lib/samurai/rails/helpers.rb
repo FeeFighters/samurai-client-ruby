@@ -1,5 +1,10 @@
 require 'pathname'
 
+# Samurai::Rails::Helpers
+# -----------------
+
+# Helper module containing useful methods that can be called from Rails controllers
+# Useful for setting up objects properly for a Transparent Redirect, or displaying errors on payment forms
 module Samurai::Rails
   module Helpers
 

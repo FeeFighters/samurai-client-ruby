@@ -1,18 +1,23 @@
 require 'active_resource/version'
+
+# Samurai::PaymentMethod
+# -----------------
+
+# Samurai credit card tokenization, including retaining & redacting Payment Methods
 class Samurai::PaymentMethod < Samurai::Base
   
   include Samurai::CacheableByToken
 
-  def id # :nodoc:
+  def id
     self.token
   end
   
-  # Alias for +payment_method_token+
+  # Alias for `payment_method_token`
   def token
     self.payment_method_token
   end
   
-  # Retains the payment method on api.samurai.feefighters.com. Retain a payment method if
+  # Retains the payment method on `api.samurai.feefighters.com`. Retain a payment method if
   # it will not be used immediately. 
   def retain
     self.post(:retain)
@@ -28,17 +33,18 @@ class Samurai::PaymentMethod < Samurai::Base
     @custom_data ||= self.custom && (JSON.parse(self.custom) rescue {}).symbolize_keys
   end
 
+  # Override base error processing with specific PaymentMethod behavior
+  # Examine the `<messages>` array, and add an error to the Errors object for each `<message>`
   def process_response_errors
     if respond_to?(:messages) && self.messages
       self.messages.each do |message|
-        #if (message.respond_to?(:subclass) && message.subclass == 'error')
-          self.errors.add message.context.gsub(/\./, ' '), message.key
-        #end
+        self.errors.add message.context.gsub(/\./, ' '), message.key
       end
     end
   end
   protected :process_response_errors
 
+  # Setup the PaymentMethod schema for ActiveResource, so that new objects contain empty attributes
   KNOWN_ATTRIBUTES = [
     :first_name, :last_name, :address_1, :address_2, :city, :state, :zip,
     :card_number, :cvv, :expiry_month, :expiry_year
@@ -57,7 +63,7 @@ class Samurai::PaymentMethod < Samurai::Base
     end
   end
 
-  # Prepare a new PaymentMethod for use with a transparent redirect form
+  # Convenience method for preparing a new PaymentMethod for use with a transparent redirect form
   def self.for_transparent_redirect(params)
     if params[:payment_method_token].blank?
       Samurai::PaymentMethod.new(params)
