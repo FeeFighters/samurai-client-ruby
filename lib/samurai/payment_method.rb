@@ -15,6 +15,7 @@ class Samurai::PaymentMethod < Samurai::Base
   # Alias for `payment_method_token`
   def token
     self.payment_method_token
+    # self.attributes["payment_method_token"]
   end
   
   # Retains the payment method on `api.samurai.feefighters.com`. Retain a payment method if
