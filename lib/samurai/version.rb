@@ -1,3 +1,3 @@
 module Samurai
-  VERSION = "0.2.18".freeze
+  VERSION = "0.2.20".freeze
 end
