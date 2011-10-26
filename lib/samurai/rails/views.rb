@@ -21,16 +21,38 @@ module Samurai::Rails
       PARTIALS = [ 'payment_form', 'errors', 'transaction' ]
 
       PARTIALS.each do |partial|
-        define_method partial do |attrs|
-          attrs ||= {}
-          {:file=>send("#{partial}_file"), :locals=>attrs}
-        end
-        define_method "#{partial}_file" do
-          Pathname.new(__FILE__).dirname.join('../../..', 'app', 'views', 'application', "_#{partial}.html.erb").to_s
-        end
-        define_method "#{partial}_html" do
-          File.read send("#{partial}_file")
-        end
+        # _Example:_
+        #
+        #   def payment_method(attrs={})
+        #     {:file=>send("payment_method_file"), :locals=>attrs}
+        #   end
+        class_eval <<-__METHOD__
+          def #{partial}(attrs={})
+            {:file=>send("#{partial}_file"), :locals=>attrs}
+          end
+        __METHOD__
+
+        # _Example:_
+        #
+        #   def payment_method_file
+        #     Pathname.new(__FILE__).dirname.join('../../..', 'app', 'views', 'application', "_payment_method.html.erb").to_s
+        #   end
+        class_eval <<-__METHOD__
+          def #{partial}_file
+            Pathname.new('#{__FILE__}').dirname.join('../../..', 'app', 'views', 'application', "_#{partial}.html.erb").to_s
+          end
+        __METHOD__
+
+        # _Example:_
+        #
+        #   def payment_method_html
+        #     File.read send("payment_method_file")
+        #   end
+        class_eval <<-__METHOD__
+          def #{partial}_html
+            File.read send("#{partial}_file")
+          end
+        __METHOD__
       end
 
     end
