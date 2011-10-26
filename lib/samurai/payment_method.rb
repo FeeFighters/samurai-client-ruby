@@ -47,7 +47,7 @@ class Samurai::PaymentMethod < Samurai::Base
   # Setup the PaymentMethod schema for ActiveResource, so that new objects contain empty attributes
   KNOWN_ATTRIBUTES = [
     :first_name, :last_name, :address_1, :address_2, :city, :state, :zip,
-    :card_number, :cvv, :expiry_month, :expiry_year
+    :card_number, :cvv, :expiry_month, :expiry_year, :sandbox, :custom
   ]
   if [ActiveResource::VERSION::MAJOR, ActiveResource::VERSION::MINOR].compact.join('.').to_f < 3.1
     # If we're using ActiveResource pre-3.1, there's no schema class method, so we resort to some tricks...
