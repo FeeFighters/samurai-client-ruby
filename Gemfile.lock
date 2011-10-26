@@ -9,24 +9,22 @@ GIT
 PATH
   remote: .
   specs:
-    samurai (0.2.19)
+    samurai (0.2.21)
       activeresource (>= 2.2.2)
 
 GEM
   remote: http://rubygems.org/
   specs:
-    activemodel (3.1.0)
-      activesupport (= 3.1.0)
-      bcrypt-ruby (~> 3.0.0)
+    activemodel (3.1.1)
+      activesupport (= 3.1.1)
       builder (~> 3.0.0)
       i18n (~> 0.6)
-    activeresource (3.1.0)
-      activemodel (= 3.1.0)
-      activesupport (= 3.1.0)
-    activesupport (3.1.0)
+    activeresource (3.1.1)
+      activemodel (= 3.1.1)
+      activesupport (= 3.1.1)
+    activesupport (3.1.1)
       multi_json (~> 1.0)
     archive-tar-minitar (0.5.2)
-    bcrypt-ruby (3.0.1)
     builder (3.0.0)
     columnize (0.3.4)
     diff-lcs (1.1.3)
