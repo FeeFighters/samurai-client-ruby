@@ -38,41 +38,43 @@ Samurai.options = {
 require 'logger'
 ActiveResource::Base.logger = Logger.new(STDOUT)
 
-module ActiveResource
-  class Connection
-    private
-      # Makes a request to the remote service.
-      def request(method, path, *arguments)
-        result = ActiveSupport::Notifications.instrument("request.active_resource") do |payload|
-          payload[:method]      = method
-          payload[:request_uri] = "#{site.scheme}://#{site.host}:#{site.port}#{path}"
-          payload[:request_arguments] = arguments
-          payload[:result]      = http.send(method, path, *arguments)
+if [ActiveResource::VERSION::MAJOR, ActiveResource::VERSION::MINOR].compact.join('.').to_f >= 3.0
+  module ActiveResource
+    class Connection
+      private
+        # Makes a request to the remote service.
+        def request(method, path, *arguments)
+          result = ActiveSupport::Notifications.instrument("request.active_resource") do |payload|
+            payload[:method]      = method
+            payload[:request_uri] = "#{site.scheme}://#{site.host}:#{site.port}#{path}"
+            payload[:request_arguments] = arguments
+            payload[:result]      = http.send(method, path, *arguments)
+          end
+          handle_response(result)
+        rescue Timeout::Error => e
+          raise TimeoutError.new(e.message)
+        rescue OpenSSL::SSL::SSLError => e
+          raise SSLError.new(e.message)
         end
-        handle_response(result)
-      rescue Timeout::Error => e
-        raise TimeoutError.new(e.message)
-      rescue OpenSSL::SSL::SSLError => e
-        raise SSLError.new(e.message)
+    end
+  end
+
+  module ActiveResource
+    class VerboseLogSubscriber < ActiveSupport::LogSubscriber
+      def request(event)
+        result = event.payload[:result]
+        info "#{event.payload[:method].to_s.upcase} #{event.payload[:request_uri]}"
+        event.payload[:request_arguments].each {|s| debug s }
+        info "--> %d %s %d (%.1fms)" % [result.code, result.message, result.body.to_s.length, event.duration]
+        debug result.body.to_s
       end
-  end
-end
 
-module ActiveResource
-  class VerboseLogSubscriber < ActiveSupport::LogSubscriber
-    def request(event)
-      result = event.payload[:result]
-      info "#{event.payload[:method].to_s.upcase} #{event.payload[:request_uri]}"
-      event.payload[:request_arguments].each {|s| debug s }
-      info "--> %d %s %d (%.1fms)" % [result.code, result.message, result.body.to_s.length, event.duration]
-      debug result.body.to_s
-    end
-
-    def logger
-      ActiveResource::Base.logger
+      def logger
+        ActiveResource::Base.logger
+      end
     end
   end
-end
 
-ActiveSupport::Notifications.unsubscribe "request.active_resource"
-ActiveResource::VerboseLogSubscriber.attach_to :active_resource
+  ActiveSupport::Notifications.unsubscribe "request.active_resource"
+  ActiveResource::VerboseLogSubscriber.attach_to :active_resource
+end

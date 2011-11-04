@@ -70,7 +70,7 @@ class Samurai::Transaction < Samurai::Base
     if self.processor_response && self.processor_response.messages
       self.processor_response.messages.each do |message|
         if message.subclass == 'error'
-          self.errors.add message.context.gsub(/\./, ' '), message.key
+          self.errors.add message.context, message.description
         end
       end
     end
