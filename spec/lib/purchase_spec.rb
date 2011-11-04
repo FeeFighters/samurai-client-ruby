@@ -33,9 +33,8 @@ describe "processing purchases" do
   end
 
   it "should be able to credit a settled purchase" do
-    pending "currently we cannot force settle a purchase, so can't test this properly" do
-      credit = @purchase.credit
-      credit.processor_response.success.should be_true
-    end
+    pending "currently we cannot force settle a purchase, so can't test this properly"
+    credit = @purchase.credit
+    credit.processor_response.success.should be_true
   end
 end

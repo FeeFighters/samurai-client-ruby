@@ -13,7 +13,7 @@ describe "processing authorizations" do
 
   it "should find the authorization" do
     transaction = Samurai::Transaction.find(@authorization.reference_id)
-    transaction.reference_id.intern.should be_equal(@authorization.reference_id.intern)
+    transaction.reference_id.should == @authorization.reference_id
   end
 
   it "should successfully capture" do
@@ -23,13 +23,13 @@ describe "processing authorizations" do
   
   it "should capture an authorization without specifying an amount" do
     capture = @authorization.capture
-    capture.amount.intern.should be_equal "#{1.0}".intern
+    capture.amount.should == "#{1.0}"
     capture.processor_response.success.should be_true
   end
 
   it "should partially capture an authorization" do
     capture = @authorization.capture(1.0 - BigDecimal('0.5'))
-    capture.amount.intern.should be_equal "#{1.0 - BigDecimal('0.5')}".intern
+    capture.amount.should == "#{1.0 - BigDecimal('0.5')}"
     capture.processor_response.success.should be_true
   end
 
@@ -40,7 +40,7 @@ describe "processing authorizations" do
 
   it "should credit an authorization for the full amount by default" do
     credit = @authorization.credit
-    credit.amount.intern.should be_equal "#{1.0}".intern
+    credit.amount.should == "#{1.0}"
     pending "the response is not successful since the authorization hasn't settled" do
       credit.processor_response.success.should be_true
     end
@@ -48,7 +48,7 @@ describe "processing authorizations" do
 
   it "should partially credit an authorization" do
     credit = @authorization.credit(1.0 - BigDecimal('0.5'))
-    credit.amount.intern.should be_equal "#{1.0 - BigDecimal('0.5')}".intern
+    credit.amount.should == "#{1.0 - BigDecimal('0.5')}"
     pending "the response is not successful since the authorization hasn't settled" do
       credit.processor_response.success.should be_true
     end

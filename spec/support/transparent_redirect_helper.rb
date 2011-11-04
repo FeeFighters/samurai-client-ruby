@@ -25,18 +25,19 @@ module TransparentRedirectHelper
 
   def default_payment_method_params
     {
+      'sandbox' => true,
       'redirect_url' => 'http://test.host',
       'merchant_key' => Samurai.merchant_key,
       'custom' => 'custom',
       'credit_card[first_name]' => 'FirstName',
       'credit_card[last_name]' => 'LastName',
-      'credit_card[address_1]' => '123 Main St',
+      'credit_card[address_1]' => '1000 1st Av',
       'credit_card[address_2]' => '',
       'credit_card[city]' => 'Chicago',
       'credit_card[state]' => 'IL',
-      'credit_card[zip]' => '60610',
-      'credit_card[card_number]' => '4222222222222',
-      'credit_card[cvv]' => '123',
+      'credit_card[zip]' => '10101',
+      'credit_card[card_number]' => '4111111111111111',
+      'credit_card[cvv]' => '111',
       'credit_card[expiry_month]' => '05',
       'credit_card[expiry_year]' => '2014',
     }
