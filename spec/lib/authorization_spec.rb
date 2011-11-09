@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe "processing authorizations" do
-  
+
   before :each do
     payment_method_token = create_payment_method(default_payment_method_params)[:payment_method_token]
     @authorization = Samurai::Processor.authorize(payment_method_token, 1.0, :billing_reference=>rand(1000))
   end
-  
+
   it "should create a new authorization transaction" do
     @authorization.processor_response.success.should be_true
   end
@@ -20,7 +20,7 @@ describe "processing authorizations" do
     capture = @authorization.capture(1.0)
     capture.processor_response.success.should be_true
   end
-  
+
   it "should capture an authorization without specifying an amount" do
     capture = @authorization.capture
     capture.amount.should == "#{1.0}"
@@ -28,8 +28,8 @@ describe "processing authorizations" do
   end
 
   it "should partially capture an authorization" do
-    capture = @authorization.capture(1.0 - BigDecimal('0.5'))
-    capture.amount.should == "#{1.0 - BigDecimal('0.5')}"
+    capture = @authorization.capture(BigDecimal('0.5'))
+    capture.amount.should == "#{BigDecimal('0.5')}"
     capture.processor_response.success.should be_true
   end
 
@@ -40,17 +40,13 @@ describe "processing authorizations" do
 
   it "should credit an authorization for the full amount by default" do
     credit = @authorization.credit
-    credit.amount.should == "#{1.0}"
-    pending "the response is not successful since the authorization hasn't settled" do
-      credit.processor_response.success.should be_true
-    end
+    credit.amount.should == "#{BigDecimal('0.5')}"
+    credit.processor_response.success.should be_true
   end
 
   it "should partially credit an authorization" do
-    credit = @authorization.credit(1.0 - BigDecimal('0.5'))
-    credit.amount.should == "#{1.0 - BigDecimal('0.5')}"
-    pending "the response is not successful since the authorization hasn't settled" do
-      credit.processor_response.success.should be_true
-    end
+    credit = @authorization.credit(BigDecimal('0.5'))
+    credit.amount.should == "#{BigDecimal('0.5')}"
+    credit.processor_response.success.should be_true
   end
 end

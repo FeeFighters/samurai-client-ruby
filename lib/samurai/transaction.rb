@@ -5,25 +5,25 @@
 # It can be used to query Transactions & capture/void/credit/reverse
 class Samurai::Transaction < Samurai::Base
   include Samurai::CacheableByToken
-  
+
   # Alias for `transaction_token`
   def id
     transaction_token
   end
   alias_method :token, :id
-  
+
   # Captures an authorization. Optionally specify an `amount` to do a partial capture of the initial
   # authorization. The default is to capture the full amount of the authorization.
   def capture(amount = nil, options = {})
     execute(:capture, {:amount => amount || self.amount}.reverse_merge(options))
   end
-  
-  # Void this transaction. If the transaction has not yet been captured and settled it can be voided to 
+
+  # Void this transaction. If the transaction has not yet been captured and settled it can be voided to
   # prevent any funds from transferring.
   def void(options = {})
     execute(:void, options)
   end
-  
+
   # Create a credit or refund against the original transaction.
   # Optionally accepts an `amount` to credit, the default is to credit the full
   # value of the original amount
@@ -34,9 +34,7 @@ class Samurai::Transaction < Samurai::Base
   # Reverse this transaction.  First, tries a void.
   # If a void is unsuccessful, (because the transaction has already settled) perform a credit for the full amount.
   def reverse(options = {})
-    transaction = void(options)
-    return transaction if transaction.processor_response.success
-    return credit(nil, options)
+    execute(:reverse, {:amount => amount || self.amount}.reverse_merge(options))
   end
 
   def success?

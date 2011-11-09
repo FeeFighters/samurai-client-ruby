@@ -17,24 +17,24 @@ describe "processing purchases" do
       void.processor_response.success.should be_true
     end
 
-    it "should not be able to credit a recent purchase" do
+    it "should be able to credit a recent purchase" do
       credit = @purchase.credit
-      credit.processor_response.success.should be_false
+      credit.processor_response.success.should be_true
+      credit.transaction_type.should == 'Credit'
     end
 
     it "should be able to reverse a recent purchase" do
       reverse = @purchase.reverse
       reverse.processor_response.success.should be_true
+      reverse.transaction_type.should == 'Credit'
     end
 
     it "should be able to reverse a settled purchase" do
-      pending "currently we cannot force settle a purchase, so can't test this properly"
       reverse = @purchase.reverse
       reverse.processor_response.success.should be_true
     end
 
     it "should be able to credit a settled purchase" do
-      pending "currently we cannot force settle a purchase, so can't test this properly"
       credit = @purchase.credit
       credit.processor_response.success.should be_true
     end

@@ -9,16 +9,16 @@ describe "Processor actions" do
     processor = Samurai::Processor.the_processor
     processor.should_not be_nil
   end
-  
+
   it "should create a new purchase" do
-    purchase = Samurai::Processor.purchase(@payment_method_token, @seed)
+    purchase = Samurai::Processor.purchase(@payment_method_token, 1.0, :billing_reference=>rand(1000))
     purchase.processor_response.success.should be_true
     # FakeWeb.last_request
   end
 
   it "should create a new purchase with tracking data" do
-    purchase = Samurai::Processor.purchase(@payment_method_token, @seed, {
-      :descriptor => "A test purchase", 
+    purchase = Samurai::Processor.purchase(@payment_method_token, 1.0, {
+      :descriptor => "A test purchase",
       :custom => "some optional custom data",
       :billing_reference => "ABC123",
       :customer_reference => "Customer (123)"
@@ -26,10 +26,10 @@ describe "Processor actions" do
     purchase.processor_response.success.should be_true
     # FakeWeb.last_request
   end
-    
+
   it "should create a non-new authorization" do
-    authorization = Samurai::Processor.authorize(@payment_method_token, @seed)
+    authorization = Samurai::Processor.authorize(@payment_method_token, 1.0)
     authorization.processor_response.success.should be_true
   end
-  
+
 end
