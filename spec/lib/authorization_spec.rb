@@ -40,7 +40,7 @@ describe "processing authorizations" do
 
   it "should credit an authorization for the full amount by default" do
     credit = @authorization.credit
-    credit.amount.should == "#{BigDecimal('0.5')}"
+    credit.amount.should == "#{BigDecimal('1.0')}"
     credit.processor_response.success.should be_true
   end
 
