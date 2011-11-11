@@ -10,4 +10,10 @@ class Samurai::ProcessorResponse < Samurai::Base
     avs_result_code_message && avs_result_code_message.key
   end
 
+  # Helper method for accessing the CVV result code from the response messages
+  def cvv_result_code
+    cvv_result_code_message = self.messages.find {|m| m.context=='processor.cvv_result_code' || m.context=='gateway.cvv_result_code' }
+    cvv_result_code_message && cvv_result_code_message.key
+  end
+
 end
