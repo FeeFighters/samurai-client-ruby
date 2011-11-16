@@ -49,7 +49,7 @@ retrieve any of your processors.
 Samurai API Reference
 ---------------------
 
-See the [API Reference](https://samurai.feefighters.com/developers/api-reference/ruby) for a full explanation of how this gem works with the Samurai API.
+See the [API Reference](https://samurai.feefighters.com/developers/ruby/api-reference) for a full explanation of how this gem works with the Samurai API.
 
 
 ActiveResource::Base
