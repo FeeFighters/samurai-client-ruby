@@ -38,7 +38,7 @@ class Samurai::Transaction < Samurai::Base
   end
 
   def success?
-    respond_to?(:processor_response) && processor_response.success
+    respond_to?(:processor_response) && processor_response && processor_response.success
   end
   def failed?
     !success?
