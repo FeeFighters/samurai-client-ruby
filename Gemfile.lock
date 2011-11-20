@@ -9,7 +9,7 @@ GIT
 PATH
   remote: .
   specs:
-    samurai (0.2.25)
+    samurai (0.2.27)
       activeresource (>= 2.2.2)
 
 GEM
