@@ -33,7 +33,7 @@ class Samurai::Message < Samurai::Base
     'error processor.transaction type_invalid'    => 'Requested transaction type is not allowed for this card/merchant.',
     'error processor.transaction method_invalid'  => 'The requested transaction could not be performed for this merchant.',
     'error input.amount exceeds_limit'            => 'The maximum transaction amount was exceeded.',
-    'error input.cvv invalid'                     => 'The CVV data entered is not correct.',
+    'error input.cvv invalid'                     => 'The CVV code was not correct.',
     'error processor.network_gateway communication_error'     => 'There was a fatal communication error.',
     'error processor.network_gateway unresponsive'            => 'The processing network is temporarily unavailable.',
     'error processor.network_gateway merchant_invalid'        => 'The merchant number is not on file.',
@@ -52,7 +52,21 @@ class Samurai::Message < Samurai::Base
 
     # CVV Responses
     'error input.cvv declined' => 'The CVV code was not correct.',
-    'error input.cvv declined' => 'The CVV code was invalid.',
+
+    # Input validations
+    'error input.card_number is_blank'        => 'The card number was blank.',
+    'error input.card_number not_numeric'     => 'The card number was invalid.',
+    'error input.card_number too_short'       => 'The card number was too short.',
+    'error input.card_number too_long'        => 'The card number was too long.',
+    'error input.card_number failed_checksum' => 'The card number was invalid.',
+    'error input.cvv is_blank'                => 'The CVV was blank.',
+    'error input.cvv not_numeric'             => 'The CVV was invalid.',
+    'error input.cvv too_short'               => 'The CVV was too short.',
+    'error input.cvv too_long'                => 'The CVV was too long.',
+    'error input.expiry_month is_blank'       => 'The expiration month was blank.',
+    'error input.expiry_month not_numeric'    => 'The expiration month was invalid.',
+    'error input.expiry_year is_blank'        => 'The expiration year was blank.',
+    'error input.expiry_year not_numeric'     => 'The expiration year was invalid.',
   }
 
   def self.response_mappings

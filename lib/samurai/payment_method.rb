@@ -37,8 +37,10 @@ class Samurai::PaymentMethod < Samurai::Base
   # Examine the `<messages>` array, and add an error to the Errors object for each `<message>`
   def process_response_errors
     if respond_to?(:messages) && self.messages
-      self.messages.each do |message|
-        self.errors.add message.context, message.description
+      # Sort the messages so that more-critical/relevant ones appear first, since only the first error is added to a field
+      sorted_messages = self.messages.sort_by {|m| ['is_blank', 'not_numeric', 'too_short', 'too_long', 'failed_checksum'].index(m.key) || 0 }
+      sorted_messages.each do |message|
+        self.errors.add message.context, message.description if self.errors[message.context].blank?
       end
     end
   end
