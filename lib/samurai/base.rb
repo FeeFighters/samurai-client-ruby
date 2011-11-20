@@ -19,7 +19,7 @@ class Samurai::Base < ActiveResource::Base
   end
 
   def has_errors?
-    respond_to?(:errors) && !errors.empty?
+    respond_to?(:errors) && errors && errors.count > 0
   end
 
   protected
