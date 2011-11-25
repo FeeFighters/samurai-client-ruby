@@ -65,7 +65,7 @@ class Samurai::Transaction < Samurai::Base
   # Override base error processing with specific Transaction behavior
   # Examine the `<processor_response><messages>` array, and add an error to the Errors object for each `<message>`
   def process_response_errors
-    if self.processor_response && self.processor_response.messages
+    if respond_to?(:processor_response) && self.processor_response.respond_to?(:messages)
       self.processor_response.messages.each do |message|
         if message.subclass == 'error'
           self.errors.add message.context, message.description
