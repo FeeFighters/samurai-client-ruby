@@ -67,7 +67,7 @@ class Samurai::Transaction < Samurai::Base
   # Examine the `<processor_response><messages>` array, and add an error to the Errors object for each `<message>`
   def process_response_errors
     _messages = []
-    _messages += processor_response.messages if processor_response
+    _messages += processor_response.messages if respond_to?(:processor_response) && processor_response.respond_to?(:messages)
     _messages += payment_method.messages if payment_method
     _messages.each do |message|
       if message.subclass == 'error'
