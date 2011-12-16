@@ -1,10 +1,5 @@
 require 'rspec'
-require 'ruby-debug'
 require 'pp'
-Debugger.start
-Debugger.settings[:autoeval] = true
-Debugger.settings[:autolist] = 5
-Debugger.settings[:reload_source_on_change] = true
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
@@ -23,13 +18,13 @@ RSpec.configure do |c|
 end
 
 require 'samurai'
-Samurai.options = {
-  :site => SITE, 
+DEFAULT_OPTIONS = {
+  :site => SITE,
   :merchant_key => ENV['merchant_key'] || 'a1ebafb6da5238fb8a3ac9f6',
   :merchant_password => ENV['merchant_password'] || 'ae1aa640f6b735c4730fbb56',
   :processor_token => ENV['processor_token'] || '5a0e1ca1e5a11a2997bbf912'
 }
-
+Samurai.options = DEFAULT_OPTIONS.clone
 
 
 #

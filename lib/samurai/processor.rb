@@ -4,12 +4,13 @@
 # This class represents a Samurai Processor connection
 # It can be used to create purchase & authorize transactions
 class Samurai::Processor < Samurai::Base
-  
+  alias_method :token, :id
+
   # Returns the default processor specified by Samurai.processor_token if you passed it into Samurai.setup_site.
   def self.the_processor
     Samurai::Processor.new(:id => Samurai.processor_token)
   end
-  
+
   # Convenience method that calls the purchase method on the default processor.
   def self.purchase(*args)
     the_processor.purchase(*args)
@@ -19,7 +20,7 @@ class Samurai::Processor < Samurai::Base
   def self.authorize(*args)
     the_processor.authorize(*args)
   end
-  
+
   # Convenience method to authorize and capture a payment_method for a particular amount in one transaction.
   # Parameters:
   #
@@ -52,7 +53,7 @@ class Samurai::Processor < Samurai::Base
   def authorize(payment_method_token, amount, options = {})
     execute(:authorize, options.merge(:payment_method_token => payment_method_token, :amount => amount))
   end
-  
+
   private
 
   # Make the actual ActiveResource POST request, process the response
@@ -77,5 +78,5 @@ class Samurai::Processor < Samurai::Base
       end
     end
   end
-  
+
 end

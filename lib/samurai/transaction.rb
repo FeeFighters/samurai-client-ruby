@@ -33,13 +33,14 @@ class Samurai::Transaction < Samurai::Base
 
   # Reverse this transaction.  First, tries a void.
   # If a void is unsuccessful, (because the transaction has already settled) perform a credit for the full amount.
-  def reverse(options = {})
+  def reverse(amount = nil, options = {})
     execute(:reverse, {:amount => amount || self.amount}.reverse_merge(options))
   end
 
   def success?
     respond_to?(:processor_response) && processor_response && processor_response.success
   end
+  alias_method :success, :success?
   def failed?
     !success?
   end
@@ -65,11 +66,12 @@ class Samurai::Transaction < Samurai::Base
   # Override base error processing with specific Transaction behavior
   # Examine the `<processor_response><messages>` array, and add an error to the Errors object for each `<message>`
   def process_response_errors
-    if self.processor_response && self.processor_response.messages
-      self.processor_response.messages.each do |message|
-        if message.subclass == 'error'
-          self.errors.add message.context, message.description
-        end
+    _messages = []
+    _messages += processor_response.messages if processor_response
+    _messages += payment_method.messages if payment_method
+    _messages.each do |message|
+      if message.subclass == 'error'
+        self.errors.add message.context, message.description
       end
     end
   end

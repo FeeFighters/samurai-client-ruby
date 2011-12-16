@@ -24,7 +24,7 @@ module TransparentRedirectHelper
   end
 
   def default_payment_method_params
-    {
+    @default_payment_method_params ||= {
       'sandbox' => true,
       'redirect_url' => 'http://test.host',
       'merchant_key' => Samurai.merchant_key,
