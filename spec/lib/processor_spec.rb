@@ -132,22 +132,29 @@ describe "Processor" do
     end
     describe 'failures' do
       it 'should return processor.transaction - declined' do
-        purchase = Samurai::Processor.authorize(@payment_method_token, 1.02, :billing_reference=>rand(1000))
-        purchase.success.should be_false
-        purchase.errors['processor.transaction'].should == [ 'The card was declined.' ]
+        authorize = Samurai::Processor.authorize(@payment_method_token, 1.02, :billing_reference=>rand(1000))
+        authorize.success.should be_false
+        authorize.errors['processor.transaction'].should == [ 'The card was declined.' ]
       end
       it 'should return input.amount - invalid' do
-        purchase = Samurai::Processor.authorize(@payment_method_token, 1.10, :billing_reference=>rand(1000))
-        purchase.success.should be_false
-        purchase.errors['input.amount'].should == [ 'The transaction amount was invalid.' ]
+        authorize = Samurai::Processor.authorize(@payment_method_token, 1.10, :billing_reference=>rand(1000))
+        authorize.success.should be_false
+        authorize.errors['input.amount'].should == [ 'The transaction amount was invalid.' ]
       end
-      it 'should return input.card_number - is_invalid (invalid payment method)' do
-        params = default_payment_method_params.merge('credit_card[card_number]'=>'1234123412341234')
-        @payment_method_token = create_payment_method(params)[:payment_method_token]
-        purchase = Samurai::Processor.authorize(@payment_method_token, 1.00, :billing_reference=>rand(1000))
-        purchase.success.should be_false
-        purchase.errors['input.card_number'].should == [ 'The card number was invalid.' ]
-      end
+      it 'should return input.card_number - failed_checksum (invalid payment method)' #do
+      #  params = default_payment_method_params.merge('credit_card[card_number]'=>'1234123412341234')
+      #  @payment_method_token = create_payment_method(params)[:payment_method_token]
+      #  authorize = Samurai::Processor.authorize(@payment_method_token, 1.00, :billing_reference=>rand(1000))
+      #  authorize.success.should be_false
+      #  authorize.errors['input.card_number'].should == [ 'The card number was invalid.' ]
+      #end
+      it 'should return input.card_number - invalid (invalid payment method)' #do
+      #  params = default_payment_method_params.merge('credit_card[card_number]'=>'5105105105105100')
+      #  @payment_method_token = create_payment_method(params)[:payment_method_token]
+      #  authorize = Samurai::Processor.authorize(@payment_method_token, 1.00, :billing_reference=>rand(1000))
+      #  authorize.success.should be_false
+      #  authorize.errors['input.card_number'].should == [ 'The card number was invalid.' ]
+      #end
     end
     describe 'cvv responses' do
       it 'should return processor.cvv_result_code = M' do
