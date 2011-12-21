@@ -96,7 +96,8 @@ class Samurai::Transaction < Samurai::Base
   # Setup the Transaction schema for ActiveResource, so that new objects contain empty attributes
   KNOWN_ATTRIBUTES = [
     :amount, :type, :payment_method_token, :currency_code,
-    :descriptor, :custom, :customer_reference, :billing_reference, :processor_response
+    :description, :custom, :customer_reference, :billing_reference, :processor_response,
+    :descriptor_name, :descriptor_phone
   ]
   if [ActiveResource::VERSION::MAJOR, ActiveResource::VERSION::MINOR].compact.join('.').to_f < 3.1
     # If we're using ActiveResource pre-3.1, there's no schema class method, so we resort to some tricks...

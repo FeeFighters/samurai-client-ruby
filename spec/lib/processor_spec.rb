@@ -25,13 +25,17 @@ describe "Processor" do
   describe 'purchase' do
     it 'should be successful' do
       purchase = Samurai::Processor.purchase(@payment_method_token, 100.0, {
-        :descriptor => "descriptor",
+        :description => "description",
+        :descriptor_name => "descriptor_name",
+        :descriptor_phone => "descriptor_phone",
         :custom => "custom_data",
         :billing_reference => "ABC123#{@rand}",
         :customer_reference => "Customer (123)",
       })
       purchase.success.should be_true
-      purchase.descriptor.should == 'descriptor'
+      purchase.description.should == 'description'
+      purchase.descriptor_name.should == 'descriptor_name'
+      purchase.descriptor_phone.should == 'descriptor_phone'
       purchase.custom.should == 'custom_data'
       purchase.billing_reference.should == "ABC123#{@rand}"
       purchase.customer_reference.should == "Customer (123)"
@@ -119,13 +123,17 @@ describe "Processor" do
   describe 'authorize' do
     it 'should be successful' do
       purchase = Samurai::Processor.authorize(@payment_method_token, 100.0, {
-        :descriptor => "descriptor",
+        :description => "description",
+        :descriptor_name => "descriptor_name",
+        :descriptor_phone => "descriptor_phone",
         :custom => "custom_data",
         :billing_reference => "ABC123#{@rand}",
         :customer_reference => "Customer (123)",
       })
       purchase.success.should be_true
-      purchase.descriptor.should == 'descriptor'
+      purchase.description.should == 'description'
+      purchase.descriptor_name.should == 'descriptor_name'
+      purchase.descriptor_phone.should == 'descriptor_phone'
       purchase.custom.should == 'custom_data'
       purchase.billing_reference.should == "ABC123#{@rand}"
       purchase.customer_reference.should == "Customer (123)"

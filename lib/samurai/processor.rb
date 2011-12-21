@@ -27,7 +27,9 @@ class Samurai::Processor < Samurai::Base
   # * `payment_method_token`: token identifying the payment method to authorize
   # * `amount`: amount to authorize
   # * `options`: an optional has of additional values to pass in accepted values are:
-  #   * `descriptor`: descriptor for the transaction
+  #   * `description`: description for the transaction
+  #   * `descriptor_name`: dynamic descriptor name field
+  #   * `descriptor_phone`: dynamic descriptor phone field
   #   * `custom`: custom data, this data does not get passed to the processor, it is stored within `api.samurai.feefighters.com` only
   #   * `customer_reference`: an identifier for the customer, this will appear in the processor if supported
   #   * `billing_reference`: an identifier for the purchase, this will appear in the processor if supported
@@ -44,7 +46,9 @@ class Samurai::Processor < Samurai::Base
   # * `amount`: amount to authorize
   #
   # * options: an optional has of additional values to pass in accepted values are:
-  #   * `descriptor`: descriptor for the transaction
+  #   * `description`: description for the transaction
+  #   * `descriptor_name`: dynamic descriptor name field
+  #   * `descriptor_phone`: dynamic descriptor phone field
   #   * `custom`: custom data, this data does not get passed to the processor, it is stored within api.samurai.feefighters.com only
   #   * `customer_reference`: an identifier for the customer, this will appear in the processor if supported
   #   * `billing_reference`: an identifier for the purchase, this will appear in the processor if supported
