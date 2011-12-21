@@ -84,7 +84,9 @@ class Samurai::Transaction < Samurai::Base
       :type => options[:type],
       :payment_method_token => options[:payment_method_token],
       :currency_code => options[:currency_code] || (options[:payment_method_token] && 'USD'), # currency code is only required for payloads that include the PMT
-      :descriptor => options[:descriptor],
+      :description => options[:description],
+      :descriptor_name => options[:descriptor_name],
+      :descriptor_phone => options[:descriptor_phone],
       :custom => options[:custom],
       :customer_reference => options[:customer_reference],
       :billing_reference => options[:billing_reference]
