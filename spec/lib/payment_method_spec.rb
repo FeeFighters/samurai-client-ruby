@@ -187,11 +187,6 @@ describe "PaymentMethod" do
         @pm.is_sensitive_data_valid.should be_false
         @pm.errors['input.cvv'].should == [ 'The CVV was too long.' ]
       end
-      it 'should return not_numeric' do
-        @pm.update_attributes @params.merge(:cvv => 'abcd1')
-        @pm.is_sensitive_data_valid.should be_false
-        @pm.errors['input.cvv'].should == [ 'The CVV was invalid.' ]
-      end
     end
     describe 'fail on input.expiry_month' do
       it 'should return is_blank' do
