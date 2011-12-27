@@ -20,12 +20,14 @@ class Samurai::PaymentMethod < Samurai::Base
   # Retains the payment method on `api.samurai.feefighters.com`. Retain a payment method if
   # it will not be used immediately. 
   def retain
-    self.post(:retain)
+    resp = self.post(:retain, {}, '<payment_method></payment_method>')
+    self.load_attributes_from_response(resp)
   end
   
   # Redacts sensitive information from the payment method, rendering it unusable.
   def redact
-    self.post(:redact)
+    resp = self.post(:redact, {}, '<payment_method></payment_method>')
+    self.load_attributes_from_response(resp)
   end
   
   # Retrieves JSON formatted custom data that is encoded in the custom_data attribute

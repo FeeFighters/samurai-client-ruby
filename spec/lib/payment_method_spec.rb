@@ -245,4 +245,60 @@ describe "PaymentMethod" do
     end
   end
 
+  describe '#redact' do
+    before do
+      @pm = Samurai::PaymentMethod.create(@params)
+    end
+    it 'should be successful' do
+      @pm.is_redacted.should be_false
+      @pm.redact
+      @pm.tap do |pm|
+        pm.is_redacted.should be_true
+        pm.is_sensitive_data_valid.should be_true
+        pm.is_expiration_valid.should be_true
+        pm.first_name.should  == @params[:first_name]
+        pm.last_name.should   == @params[:last_name]
+        pm.address_1.should   == @params[:address_1]
+        pm.address_2.should   == @params[:address_2]
+        pm.city.should        == @params[:city]
+        pm.state.should       == @params[:state]
+        pm.zip.should         == @params[:zip]
+        pm.last_four_digits.should == @params[:card_number][-4, 4]
+        pm.expiry_month.should  == @params[:expiry_month].to_i
+        pm.expiry_year.should   == @params[:expiry_year].to_i
+      end
+    end
+    #it 'should not allow an authorize' do
+    #  lambda do
+    #    @pm.redact
+    #    @authorize = Samurai::Processor.authorize(@pm.token, 100.0)
+    #  end.should raise_error(ActiveResource::ResourceNotFound)
+    #end
+  end
+
+  describe '#retain' do
+    before do
+      @pm = Samurai::PaymentMethod.create(@params)
+    end
+    it 'should be successful' do
+      @pm.is_retained.should be_false
+      @pm.retain
+      @pm.tap do |pm|
+        pm.is_retained.should be_true
+        pm.is_sensitive_data_valid.should be_true
+        pm.is_expiration_valid.should be_true
+        pm.first_name.should  == @params[:first_name]
+        pm.last_name.should   == @params[:last_name]
+        pm.address_1.should   == @params[:address_1]
+        pm.address_2.should   == @params[:address_2]
+        pm.city.should        == @params[:city]
+        pm.state.should       == @params[:state]
+        pm.zip.should         == @params[:zip]
+        pm.last_four_digits.should == @params[:card_number][-4, 4]
+        pm.expiry_month.should  == @params[:expiry_month].to_i
+        pm.expiry_year.should   == @params[:expiry_year].to_i
+      end
+    end
+  end
+
 end
