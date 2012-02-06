@@ -163,7 +163,7 @@ describe "PaymentMethod" do
       it 'should return too_short' do
         @pm.update_attributes @params.merge(:card_number => '4111-1')
         @pm.is_sensitive_data_valid.should be_false
-        @pm.should have_the_error('The card number was too short.')
+        @pm.should have_the_error('input.card_number', 'The card number was too short.')
       end
       it 'should return too_long' do
         @pm.update_attributes @params.merge(:card_number => '4111-1111-1111-1111-11')
