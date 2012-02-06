@@ -15,6 +15,11 @@ module TransparentRedirectHelper
     res = Net::HTTP.new(uri.host, uri.port)
     res.use_ssl = true
 
+    puts "---------------------------------------"
+    puts "-- #{uri.inspect} "
+    puts "-- Body:\n#{req.body}"
+    puts "--------"
+
     response = res.start {|http| http.request(req) }
     {
       :payment_method_token => response['Location'] && response['Location'].sub(%r{#{Regexp.escape params['redirect_url']}\?payment_method_token=}, ''),
