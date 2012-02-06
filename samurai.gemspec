@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.name        = "samurai"
   s.version     = Samurai::VERSION.dup
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Graeme Rouse", "Derek Zak"]
-  s.email       = ["graeme@ubergateway.com", "derek@ubergateway.com"]
+  s.authors     = ["Joshua Krall", "Graeme Rouse", "Derek Zak"]
+  s.email       = ["josh@feefighters.com", "graeme@ubergateway.com", "derek@ubergateway.com"]
   s.homepage    = "http://rubygems.org/gems/samurai"
   s.summary     = "Integration gem for samurai.feefighters.com"
   s.description = "If you are an online merchant and using samurai.feefighters.com, this gem will make your life easy. Integrate with the samurai.feefighters.com portal and process transaction."
