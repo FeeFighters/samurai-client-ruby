@@ -39,39 +39,39 @@ describe "PaymentMethod" do
       it 'should return is_blank' do
         pm = Samurai::PaymentMethod.create @params.merge(:card_number => '')
         pm.is_sensitive_data_valid.should be_false
-        pm.errors['input.card_number'].should == [ 'The card number was blank.' ]
+        pm.should have_the_error('input.card_number', 'The card number was blank.')
       end
       it 'should return too_short' do
         pm = Samurai::PaymentMethod.create @params.merge(:card_number => '4111-1')
         pm.is_sensitive_data_valid.should be_false
-        pm.errors['input.card_number'].should == [ 'The card number was too short.' ]
+        pm.should have_the_error('input.card_number', 'The card number was too short.')
       end
       it 'should return too_long' do
         pm = Samurai::PaymentMethod.create @params.merge(:card_number => '4111-1111-1111-1111-11')
         pm.is_sensitive_data_valid.should be_false
-        pm.errors['input.card_number'].should == [ 'The card number was too long.' ]
+        pm.should have_the_error('input.card_number', 'The card number was too long.')
       end
       it 'should return failed_checksum' do
         pm = Samurai::PaymentMethod.create @params.merge(:card_number => '4111-1111-1111-1234')
         pm.is_sensitive_data_valid.should be_false
-        pm.errors['input.card_number'].should == [ 'The card number was invalid.' ]
+        pm.should have_the_error('input.card_number', 'The card number was invalid.')
       end
     end
     describe 'fail on input.cvv' do
       it 'should return too_short' do
         pm = Samurai::PaymentMethod.create @params.merge(:cvv => '1')
         pm.is_sensitive_data_valid.should be_false
-        pm.errors['input.cvv'].should == [ 'The CVV was too short.' ]
+        pm.should have_the_error('input.cvv', 'The CVV was too short.')
       end
       it 'should return too_long' do
         pm = Samurai::PaymentMethod.create @params.merge(:cvv => '111111')
         pm.is_sensitive_data_valid.should be_false
-        pm.errors['input.cvv'].should == [ 'The CVV was too long.' ]
+        pm.should have_the_error('input.cvv', 'The CVV was too long.')
       end
       it 'should return not_numeric' do
         pm = Samurai::PaymentMethod.create @params.merge(:cvv => 'abcd1')
         pm.is_sensitive_data_valid.should be_false
-        pm.errors['input.cvv'].should == [ 'The CVV was invalid.' ]
+        pm.should have_the_error('input.cvv', 'The CVV was invalid.')
       end
     end
     describe 'fail on input.expiry_month' do
@@ -79,13 +79,13 @@ describe "PaymentMethod" do
         pm = Samurai::PaymentMethod.create @params.merge(:expiry_month => '')
         pm.is_sensitive_data_valid.should be_true
         pm.is_expiration_valid.should be_false
-        pm.errors['input.expiry_month'].should == [ 'The expiration month was blank.' ]
+        pm.should have_the_error('input.expiry_month', 'The expiration month was blank.')
       end
       it 'should return is_invalid' do
         pm = Samurai::PaymentMethod.create @params.merge(:expiry_month => 'abcd')
         pm.is_sensitive_data_valid.should be_true
         pm.is_expiration_valid.should be_false
-        pm.errors['input.expiry_month'].should == [ 'The expiration month was invalid.' ]
+        pm.should have_the_error('input.expiry_month', 'The expiration month was invalid.')
       end
     end
     describe 'fail on input.expiry_year' do
@@ -93,13 +93,13 @@ describe "PaymentMethod" do
         pm = Samurai::PaymentMethod.create @params.merge(:expiry_year => '')
         pm.is_sensitive_data_valid.should be_true
         pm.is_expiration_valid.should be_false
-        pm.errors['input.expiry_year'].should == [ 'The expiration year was blank.' ]
+        pm.should have_the_error('input.expiry_year', 'The expiration year was blank.')
       end
       it 'should return is_invalid' do
         pm = Samurai::PaymentMethod.create @params.merge(:expiry_year => 'abcd')
         pm.is_sensitive_data_valid.should be_true
         pm.is_expiration_valid.should be_false
-        pm.errors['input.expiry_year'].should == [ 'The expiration year was invalid.' ]
+        pm.should have_the_error('input.expiry_year', 'The expiration year was invalid.')
       end
     end
   end
@@ -140,7 +140,7 @@ describe "PaymentMethod" do
     end
     it 'should be successful preserving sensitive data' do
       _params = @params.merge({
-        :card_number => '****************',
+        :card_number => '****-****-****-5454',
         :cvv => '***',
       })
       @pm.update_attributes _params
@@ -163,29 +163,29 @@ describe "PaymentMethod" do
       it 'should return too_short' do
         @pm.update_attributes @params.merge(:card_number => '4111-1')
         @pm.is_sensitive_data_valid.should be_false
-        @pm.errors['input.card_number'].should == [ 'The card number was too short.' ]
+        @pm.should have_the_error('The card number was too short.')
       end
       it 'should return too_long' do
         @pm.update_attributes @params.merge(:card_number => '4111-1111-1111-1111-11')
         @pm.is_sensitive_data_valid.should be_false
-        @pm.errors['input.card_number'].should == [ 'The card number was too long.' ]
+        @pm.should have_the_error('input.card_number', 'The card number was too long.')
       end
       it 'should return failed_checksum' do
         @pm.update_attributes @params.merge(:card_number => '4111-1111-1111-1234')
         @pm.is_sensitive_data_valid.should be_false
-        @pm.errors['input.card_number'].should == [ 'The card number was invalid.' ]
+        @pm.should have_the_error('input.card_number', 'The card number was invalid.')
       end
     end
     describe 'fail on input.cvv' do
       it 'should return too_short' do
         @pm.update_attributes @params.merge(:cvv => '1')
         @pm.is_sensitive_data_valid.should be_false
-        @pm.errors['input.cvv'].should == [ 'The CVV was too short.' ]
+        @pm.should have_the_error('input.cvv', 'The CVV was too short.')
       end
       it 'should return too_long' do
         @pm.update_attributes @params.merge(:cvv => '111111')
         @pm.is_sensitive_data_valid.should be_false
-        @pm.errors['input.cvv'].should == [ 'The CVV was too long.' ]
+        @pm.should have_the_error('input.cvv', 'The CVV was too long.')
       end
     end
     describe 'fail on input.expiry_month' do
@@ -193,13 +193,13 @@ describe "PaymentMethod" do
         @pm.update_attributes @params.merge(:expiry_month => '')
         @pm.is_sensitive_data_valid.should be_true
         @pm.is_expiration_valid.should be_false
-        @pm.errors['input.expiry_month'].should == [ 'The expiration month was blank.' ]
+        @pm.should have_the_error('input.expiry_month', 'The expiration month was blank.')
       end
       it 'should return is_invalid' do
         @pm.update_attributes @params.merge(:expiry_month => 'abcd')
         @pm.is_sensitive_data_valid.should be_true
         @pm.is_expiration_valid.should be_false
-        @pm.errors['input.expiry_month'].should == [ 'The expiration month was invalid.' ]
+        @pm.should have_the_error('input.expiry_month', 'The expiration month was invalid.')
       end
     end
     describe 'fail on input.expiry_year' do
@@ -207,13 +207,13 @@ describe "PaymentMethod" do
         @pm.update_attributes @params.merge(:expiry_year => '')
         @pm.is_sensitive_data_valid.should be_true
         @pm.is_expiration_valid.should be_false
-        @pm.errors['input.expiry_year'].should == [ 'The expiration year was blank.' ]
+        @pm.should have_the_error('input.expiry_year', 'The expiration year was blank.')
       end
       it 'should return is_invalid' do
         @pm.update_attributes @params.merge(:expiry_year => 'abcd')
         @pm.is_sensitive_data_valid.should be_true
         @pm.is_expiration_valid.should be_false
-        @pm.errors['input.expiry_year'].should == [ 'The expiration year was invalid.' ]
+        @pm.should have_the_error('input.expiry_year', 'The expiration year was invalid.')
       end
     end
   end

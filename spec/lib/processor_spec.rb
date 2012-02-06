@@ -44,12 +44,18 @@ describe "Processor" do
       it 'should return processor.transaction - declined' do
         purchase = Samurai::Processor.purchase(@payment_method_token, 1.02, :billing_reference=>rand(1000))
         purchase.success.should be_false
-        purchase.errors['processor.transaction'].should == [ 'The card was declined.' ]
+        purchase.should have_the_error('processor.transaction', 'The card was declined.')
       end
       it 'should return input.amount - invalid' do
         purchase = Samurai::Processor.purchase(@payment_method_token, 1.10, :billing_reference=>rand(1000))
         purchase.success.should be_false
-        purchase.errors['input.amount'].should == [ 'The transaction amount was invalid.' ]
+        purchase.should have_the_error('input.amount', 'The transaction amount was invalid.')
+      end
+      it 'should return invalid sandbox request' do
+        payment_method_token = create_payment_method(default_payment_method_params.merge('credit_card[card_number]'=>'4065054005873709'))[:payment_method_token]
+        purchase = Samurai::Processor.purchase(payment_method_token, 1.00, :billing_reference=>rand(1000))
+        purchase.success.should be_false
+        purchase.should have_the_error('base', 'Invalid request.')
       end
     end
     describe 'cvv responses' do
@@ -128,12 +134,12 @@ describe "Processor" do
       it 'should return processor.transaction - declined' do
         authorize = Samurai::Processor.authorize(@payment_method_token, 1.02, :billing_reference=>rand(1000))
         authorize.success.should be_false
-        authorize.errors['processor.transaction'].should == [ 'The card was declined.' ]
+        authorize.should have_the_error('processor.transaction', 'The card was declined.')
       end
       it 'should return input.amount - invalid' do
         authorize = Samurai::Processor.authorize(@payment_method_token, 1.10, :billing_reference=>rand(1000))
         authorize.success.should be_false
-        authorize.errors['input.amount'].should == [ 'The transaction amount was invalid.' ]
+        authorize.should have_the_error('input.amount', 'The transaction amount was invalid.')
       end
     end
     describe 'cvv responses' do

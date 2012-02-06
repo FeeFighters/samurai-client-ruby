@@ -53,19 +53,7 @@ class Samurai::PaymentMethod < Samurai::Base
     :first_name, :last_name, :address_1, :address_2, :city, :state, :zip,
     :card_number, :cvv, :expiry_month, :expiry_year, :sandbox, :custom
   ]
-  if [ActiveResource::VERSION::MAJOR, ActiveResource::VERSION::MINOR].compact.join('.').to_f < 3.1
-    # If we're using ActiveResource pre-3.1, there's no schema class method, so we resort to some tricks...
-    # Initialize the known attributes from the schema as empty strings, so that they can be accessed via method-missing
-    EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject(HashWithIndifferentAccess.new) {|h, k| h[k] = ''; h}
-    def initialize(attrs={})
-      super(EMPTY_ATTRIBUTES.merge(attrs))
-    end
-  else
-    # Post AR 3.1, we can use the schema method to define our attributes
-    schema do
-      string *KNOWN_ATTRIBUTES
-    end
-  end
+  include Samurai::ActiveResourceSupport
 
   # Convenience method for preparing a new PaymentMethod for use with a transparent redirect form
   def self.for_transparent_redirect(params)
@@ -75,7 +63,7 @@ class Samurai::PaymentMethod < Samurai::Base
       Samurai::PaymentMethod.find(params[:payment_method_token]).tap do |pm|
         pm.card_number = "************#{pm.last_four_digits}"
         pm.cvv = "***"
-        pm.errors[:base] << 'The card number or CVV are not valid.' if !pm.is_sensitive_data_valid
+        pm.errors.add :base, 'The card number or CVV are not valid.' if !pm.is_sensitive_data_valid
       end
     end
   end

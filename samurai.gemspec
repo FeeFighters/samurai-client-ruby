@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.3.5"
   # s.rubyforge_project         = "samurai"
   
+  #s.add_dependency "activeresource", "~> 2.3"  # use this line to test with activeresource 2.3.x
   s.add_dependency "activeresource", ">= 2.2.2"
 
   s.add_development_dependency "bundler", ">= 1.0.0"

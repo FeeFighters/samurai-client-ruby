@@ -29,19 +29,19 @@ describe "Transaction" do
         auth = Samurai::Processor.authorize(@payment_method_token, 100.02)  # declined auth
         capture = auth.capture
         capture.success.should be_false
-        capture.errors['processor.transaction'].should == [ 'This transaction type is not allowed.' ]
+        capture.should have_the_error('processor.transaction', 'This transaction type is not allowed.')
       end
       it 'should return processor.transaction - declined' do
         auth = Samurai::Processor.authorize(@payment_method_token, 100.00)
         capture = auth.capture(100.02)
         capture.success.should be_false
-        capture.errors['processor.transaction'].should == [ 'The card was declined.' ]
+        capture.should have_the_error('processor.transaction', 'The card was declined.')
       end
       it 'should return input.amount - invalid' do
         auth = Samurai::Processor.authorize(@payment_method_token, 100.00)
         capture = auth.capture(100.10)
         capture.success.should be_false
-        capture.errors['input.amount'].should == [ 'The transaction amount was invalid.' ]
+        capture.should have_the_error('input.amount', 'The transaction amount was invalid.')
       end
     end
   end
@@ -78,7 +78,7 @@ describe "Transaction" do
         purchase = Samurai::Processor.purchase(@payment_method_token, 100.00)
         reverse = purchase.reverse(100.10)
         reverse.success.should be_false
-        reverse.errors['input.amount'].should == [ 'The transaction amount was invalid.' ]
+        reverse.should have_the_error('input.amount', 'The transaction amount was invalid.')
       end
     end
   end
@@ -115,7 +115,7 @@ describe "Transaction" do
         purchase = Samurai::Processor.purchase(@payment_method_token, 100.00)
         credit = purchase.credit(100.10)
         credit.success.should be_false
-        credit.errors['input.amount'].should == [ 'The transaction amount was invalid.' ]
+        credit.should have_the_error('input.amount', 'The transaction amount was invalid.')
       end
     end
   end

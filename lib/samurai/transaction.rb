@@ -58,7 +58,7 @@ class Samurai::Transaction < Samurai::Base
       Samurai::Transaction.new(options.merge(:transaction_type=>action.to_s)).tap do |transaction|
         transaction.created_at = Time.now
         transaction.processor_response = nil
-        transaction.errors[:base] << "Invalid request."
+        transaction.errors.add :base, "Invalid request."
       end
     end
   end
@@ -101,18 +101,6 @@ class Samurai::Transaction < Samurai::Base
     :description, :custom, :customer_reference, :billing_reference, :processor_response,
     :descriptor_name, :descriptor_phone
   ]
-  if [ActiveResource::VERSION::MAJOR, ActiveResource::VERSION::MINOR].compact.join('.').to_f < 3.1
-    # If we're using ActiveResource pre-3.1, there's no schema class method, so we resort to some tricks...
-    # Initialize the known attributes from the schema as empty strings, so that they can be accessed via method-missing
-    EMPTY_ATTRIBUTES = KNOWN_ATTRIBUTES.inject(HashWithIndifferentAccess.new) {|h, k| h[k] = ''; h}
-    def initialize(attrs={})
-      super(EMPTY_ATTRIBUTES.merge(attrs))
-    end
-  else
-    # Post AR 3.1, we can use the schema method to define our attributes
-    schema do
-      string *KNOWN_ATTRIBUTES
-    end
-  end
+  include Samurai::ActiveResourceSupport
 
 end

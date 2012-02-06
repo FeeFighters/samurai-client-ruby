@@ -78,7 +78,7 @@ class Samurai::Processor < Samurai::Base
         transaction.payment_method = Samurai::PaymentMethod.find options[:payment_method_token]
         transaction.created_at = Time.now
         transaction.processor_response = nil
-        transaction.errors[:base] << "Invalid request."
+        transaction.errors.add :base, "Invalid request."
       end
     end
   end

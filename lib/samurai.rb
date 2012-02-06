@@ -47,6 +47,7 @@ module Samurai
 end
 
 # Require each of the samurai components
+require 'samurai/active_resource_support'
 require 'samurai/cacheable_by_token'
 require 'samurai/base'
 require 'samurai/processor'
