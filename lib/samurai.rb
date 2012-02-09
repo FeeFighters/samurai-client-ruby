@@ -15,7 +15,7 @@
 # }
 # ```
 module Samurai
-  SITE = 'https://api.samurai.feefighters.com/v1/'
+  SITE = ENV['SAMURAI_API_URL'] || 'https://api.samurai.feefighters.com/v1/'
   DEFAULT_OPTIONS = {:site => SITE}
 
   # Gets the provider site that the gem is configured to hit

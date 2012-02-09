@@ -5,3 +5,4 @@ gemspec
 
 gem 'rspec_junit_formatter', :git=>'git://github.com/jkrall/rspec_junit_formatter.git'
 gem 'rake'
+gem "activeresource", "~> 2.3"
