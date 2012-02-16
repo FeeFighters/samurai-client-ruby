@@ -1,5 +1,4 @@
 <%
-  sandbox ||= false
   ajax ||= false
   redirect_url ||= '#'
   classes ||= ''
@@ -9,7 +8,6 @@
   <fieldset>
     <input name="redirect_url" type="hidden" value="<%= redirect_url %>" />
     <input name="merchant_key" type="hidden" value="<%= Samurai.options[:merchant_key] %>" />
-    <input name="sandbox" type="hidden" value="<%= sandbox %>" />
     <% unless payment_method.token.blank? %><input name="payment_method_token" type="hidden" value="<%= payment_method.token %>" /><% end %>
   </fieldset>
 
