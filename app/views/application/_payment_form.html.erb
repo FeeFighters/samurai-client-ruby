@@ -2,9 +2,10 @@
   ajax ||= false
   redirect_url ||= '#'
   classes ||= ''
+  target = "#{Samurai.site}payment_methods"
 %>
 <% payment_method ||= (@payment_method || Samurai::PaymentMethod.new) %>
-<form action="<%= Samurai.site %>/payment_methods" method="POST" class="samurai <%= classes %>" <%='data-samurai-ajax' if ajax %>>
+<form action="<%= target %>" method="POST" class="samurai <%= classes %>" <%='data-samurai-ajax' if ajax %>>
   <fieldset>
     <input name="redirect_url" type="hidden" value="<%= redirect_url %>" />
     <input name="merchant_key" type="hidden" value="<%= Samurai.options[:merchant_key] %>" />
