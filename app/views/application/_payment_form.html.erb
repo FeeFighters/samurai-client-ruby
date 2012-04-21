@@ -85,12 +85,9 @@
           <option value="12" <%= 'selected' if payment_method.expiry_month.to_s=='12' %>>12</option>
         </select>
         <select id="credit_card_expiry_year" name="credit_card[expiry_year]">
-          <option value="2011" <%= 'selected' if payment_method.expiry_year.to_s=='2011' %>>2011</option>
-          <option value="2012" <%= 'selected' if payment_method.expiry_year.to_s=='2012' %>>2012</option>
-          <option value="2013" <%= 'selected' if payment_method.expiry_year.to_s=='2013' %>>2013</option>
-          <option value="2014" <%= 'selected' if payment_method.expiry_year.to_s=='2014' %>>2014</option>
-          <option value="2015" <%= 'selected' if payment_method.expiry_year.to_s=='2015' %>>2015</option>
-          <option value="2016" <%= 'selected' if payment_method.expiry_year.to_s=='2016' %>>2016</option>
+          <% (0..10).map{ |n| Time.now.year + n }.each do |year| %>
+            <option value="<%= year %>" <%= 'selected' if payment_method.expiry_year.to_s==year.to_s %>><%= year %></option>
+          <% end %>
         </select>
       </div>
     </div>
