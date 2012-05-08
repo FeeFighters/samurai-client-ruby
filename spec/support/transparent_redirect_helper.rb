@@ -40,6 +40,7 @@ module TransparentRedirectHelper
       'credit_card[city]' => 'Chicago',
       'credit_card[state]' => 'IL',
       'credit_card[zip]' => '10101',
+      'credit_card[country]' => 'US',
       'credit_card[card_number]' => '4111111111111111',
       'credit_card[cvv]' => '111',
       'credit_card[expiry_month]' => '05',

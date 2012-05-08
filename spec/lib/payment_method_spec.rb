@@ -113,6 +113,7 @@ describe "PaymentMethod" do
         :address_2    => "Apt #3X",
         :city         => "ChicagoX",
         :state        => "IL",
+        :country      => "US",
         :zip          => "10101",
         :card_number  => "5454-5454-5454-5454",
         :cvv          => "456",
@@ -133,6 +134,7 @@ describe "PaymentMethod" do
         pm.city.should        == @params[:city]
         pm.state.should       == @params[:state]
         pm.zip.should         == @params[:zip]
+        pm.country.should     == @params[:country]
         pm.last_four_digits.should == @params[:card_number][-4, 4]
         pm.expiry_month.should  == @params[:expiry_month].to_i
         pm.expiry_year.should   == @params[:expiry_year].to_i
@@ -154,6 +156,7 @@ describe "PaymentMethod" do
         pm.city.should        == @params[:city]
         pm.state.should       == @params[:state]
         pm.zip.should         == @params[:zip]
+        pm.country.should     == @params[:country]
         pm.last_four_digits.should == '1111'
         pm.expiry_month.should  == @params[:expiry_month].to_i
         pm.expiry_year.should   == @params[:expiry_year].to_i
@@ -233,6 +236,7 @@ describe "PaymentMethod" do
         pm.city.should        == @params[:city]
         pm.state.should       == @params[:state]
         pm.zip.should         == @params[:zip]
+        pm.country.should     == @params[:country]
         pm.last_four_digits.should == @params[:card_number][-4, 4]
         pm.expiry_month.should  == @params[:expiry_month].to_i
         pm.expiry_year.should   == @params[:expiry_year].to_i
@@ -263,6 +267,7 @@ describe "PaymentMethod" do
         pm.city.should        == @params[:city]
         pm.state.should       == @params[:state]
         pm.zip.should         == @params[:zip]
+        pm.country.should     == @params[:country]
         pm.last_four_digits.should == @params[:card_number][-4, 4]
         pm.expiry_month.should  == @params[:expiry_month].to_i
         pm.expiry_year.should   == @params[:expiry_year].to_i
@@ -294,6 +299,7 @@ describe "PaymentMethod" do
         pm.city.should        == @params[:city]
         pm.state.should       == @params[:state]
         pm.zip.should         == @params[:zip]
+        pm.country.should     == @params[:country]
         pm.last_four_digits.should == @params[:card_number][-4, 4]
         pm.expiry_month.should  == @params[:expiry_month].to_i
         pm.expiry_year.should   == @params[:expiry_year].to_i

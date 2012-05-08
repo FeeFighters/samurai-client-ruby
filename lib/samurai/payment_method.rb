@@ -50,7 +50,7 @@ class Samurai::PaymentMethod < Samurai::Base
 
   # Setup the PaymentMethod schema for ActiveResource, so that new objects contain empty attributes
   KNOWN_ATTRIBUTES = [
-    :first_name, :last_name, :address_1, :address_2, :city, :state, :zip,
+    :first_name, :last_name, :address_1, :address_2, :city, :state, :zip, :country, 
     :card_number, :cvv, :expiry_month, :expiry_year, :sandbox, :custom
   ]
   include Samurai::ActiveResourceSupport
