@@ -79,6 +79,10 @@ class Samurai::Processor < Samurai::Base
         transaction.created_at = Time.now
         transaction.processor_response = nil
         transaction.errors.add :base, "Invalid request."
+        errors = transaction_errors_from_exception_response(e)
+        errors.each do |error|
+          transaction.errors.add error['context'], error['key']
+        end
       end
     end
   end

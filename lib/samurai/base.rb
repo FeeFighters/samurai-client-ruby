@@ -37,4 +37,12 @@ class Samurai::Base < ActiveResource::Base
     # Do nothing by default, subclasses may override this to process specific error messages
   end
 
+  def transaction_errors_from_exception_response(e)
+    return [] unless e && e.respond_to?(:response) && e.response && e.response.respond_to?(:body) && e.response.body
+    doc = REXML::Document.new(e.response.body)
+    errors = doc.root.elements['messages'].map do |message|
+      message.attributes.inject({}) { |memo,(k,v)| memo.update(k=>v) } if message.is_a? REXML::Element
+    end.compact
+  end
+
 end

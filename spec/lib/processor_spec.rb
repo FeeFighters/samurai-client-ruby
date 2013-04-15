@@ -141,6 +141,13 @@ describe "Processor" do
         authorize.success.should be_false
         authorize.should have_the_error('input.amount', 'The transaction amount was invalid.')
       end
+      let(:order_uid) { "order-uid-#{rand(10000)}" }
+      it 'raises error for duplicate order_uid' do
+        Samurai::Processor.authorize(@payment_method_token, 1.10, :billing_reference=>rand(1000), :order_uid => order_uid)
+        authorize = Samurai::Processor.authorize(@payment_method_token, 1.10, :billing_reference=>rand(1000), :order_uid => order_uid)
+        authorize.errors.on(:'transaction.order_uid').should be_true
+        authorize.errors[:'transaction.order_uid'].should eq 'duplicate'
+      end
     end
     describe 'cvv responses' do
       it 'should return processor.cvv_result_code = M' do

@@ -59,6 +59,10 @@ class Samurai::Transaction < Samurai::Base
         transaction.created_at = Time.now
         transaction.processor_response = nil
         transaction.errors.add :base, "Invalid request."
+        errors = transaction_errors_from_exception_response(e)
+        errors.each do |error|
+          transaction.errors.add error['context'], error['key']
+        end
       end
     end
   end
@@ -89,7 +93,8 @@ class Samurai::Transaction < Samurai::Base
       :descriptor_phone => options[:descriptor_phone],
       :custom => options[:custom],
       :customer_reference => options[:customer_reference],
-      :billing_reference => options[:billing_reference]
+      :billing_reference => options[:billing_reference],
+      :order_uid => options[:order_uid],
     }.
       reject{ |k,v| v.nil? }.
       to_xml(:skip_instruct => true, :root => 'transaction', :dasherize => false)
@@ -99,7 +104,7 @@ class Samurai::Transaction < Samurai::Base
   KNOWN_ATTRIBUTES = [
     :amount, :type, :payment_method_token, :currency_code,
     :description, :custom, :customer_reference, :billing_reference, :processor_response,
-    :descriptor_name, :descriptor_phone
+    :descriptor_name, :descriptor_phone, :order_uid
   ]
   include Samurai::ActiveResourceSupport
 
